@@ -1,3 +1,6 @@
+import java.util.HashMap;
+import java.util.Map;
+//import Cliente.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -8,63 +11,40 @@ import java.net.Socket;
  *
  * @author João Marques, Nuno Rei e Jaime Leite
  */
-public class Servidor {
-    private String serverName;
-    private String serverType;
-    private static ServerSocket SS;
-    private String clienteAtual;
-    private float pricePerHour;
-    
-    //Construtor de um Servidor
-    public Servidor(String nome, String tipo, float price) {
-        this.serverName = nome;
-        this.serverType = tipo;
-        this.pricePerHour = price;
+public class Servidor implements Runnable {
+    //private Servidor[] servidores = new Servidor[30]; //ports [1200;1229]
+    private int[] ocupados = new int[30]; //0-> livre, 1-> ocupado, 2-> leilão
+    private final Socket x;
+
+    public Servidor(Socket x) {
+        this.x = x;
     }
-    
-    //Colocar o cliente no servidor
-    public void addCliente(String nome) {
-        this.clienteAtual = nome;
-    }
-    
-    //Retirar o cliente do servidor
-    public void removeCliente() {
-        this.clienteAtual = null;
-    }
-    
-    //Retornar nome do cliente
-    public String getClienteAtual() {
-        return this.clienteAtual;
-    }
-    
-    //Atualizar preço por hora em caso de leilão
-    public void setPricePerHour(float price) {
-        this.pricePerHour = price;
-    }
-    
-    //Enquanto o cliente estiver a escrever para o servidor
-    //Falta colocar Times para calcular o tempo que o cliente esteve no servidor para adicionar há sua dívida
-    public float init(int port) throws IOException {
-        SS = new ServerSocket(port);
-        Socket x;
-        //Time timeInicio = Time.now();
+
+    public static void main(String[] args) throws Exception {
+        ServerSocket ss = new ServerSocket(12345);
+
         while (true) {
-            x = SS.accept();
+            Socket x = ss.accept();
+            new Thread(new Servidor(x)).start();
+        }
+    }
+
+    public void run() {
+        ServidorStub st = new ServidorStub();
+        try {
             PrintWriter out = new PrintWriter(x.getOutputStream());
             BufferedReader in = new BufferedReader(new InputStreamReader(x.getInputStream()));
             while (true) {
                 String s = in.readLine();
-                if(s.equals("exit")) break;
+                if (s.equals("3")) break;
                 out.println(s);
                 out.flush();
             }
             out.close();
             x.close();
-            removeCliente();
-            break;
         }
-        //Time timeFim = Time.now();
-        float price = 0;//(toHours(timeFim) - toHours(timeInicio))*pricePerHour;
-        return price;
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }
