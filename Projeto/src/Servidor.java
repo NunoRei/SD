@@ -12,36 +12,52 @@ import java.net.Socket;
  * @author João Marques, Nuno Rei e Jaime Leite
  */
 public class Servidor implements Runnable {
+
     //private Servidor[] servidores = new Servidor[30]; //ports [1200;1229]
     private int[] ocupados = new int[30]; //0-> livre, 1-> ocupado, 2-> leilão
     private final Socket x;
+    private ServidorStub st;
 
-    public Servidor(Socket x) {
+    public Servidor(Socket x, ServidorStub st) {
         this.x = x;
+        this.st = st;
     }
 
     public static void main(String[] args) throws Exception {
         ServerSocket ss = new ServerSocket(12345);
-
+        ServidorStub st = new ServidorStub();
         while (true) {
             Socket x = ss.accept();
-            new Thread(new Servidor(x)).start();
+            new Thread(new Servidor(x,st)).start();
         }
     }
 
     public void run() {
-        ServidorStub st = new ServidorStub();
+
         try {
             PrintWriter out = new PrintWriter(x.getOutputStream());
             BufferedReader in = new BufferedReader(new InputStreamReader(x.getInputStream()));
             while (true) {
                 String s = in.readLine();
-                if (s.equals("3")) break;
+                String[] p = s.split(" ");
+                switch(p[0]) {
+                    case "regista":
+                        int resregista = st.registaCliente(p[1], p[2]);
+                        s = Integer.toString(resregista);
+                        break;
+                    case "autentica":
+                        int resautentica = st.autenticaCliente(p[1], p[2]);
+                        s = Integer.toString(resautentica);
+                        break;
+                    default:
+                        System.out.println("Comando invalida.");
+                }
+                //if (s.equals("3")) break;
                 out.println(s);
                 out.flush();
             }
-            out.close();
-            x.close();
+            //out.close();
+            //x.close();
         }
         catch (Exception e){
             e.printStackTrace();

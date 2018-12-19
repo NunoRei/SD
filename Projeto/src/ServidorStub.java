@@ -12,14 +12,16 @@ import java.util.Map;
  * @author João Marques, Nuno Rei e Jaime Leite
  */
 public class ServidorStub implements interfaceGlobal {
-    private Map<String,Cliente> clientes = new HashMap<>();
+
+    private Map<String, Cliente> clientes = new HashMap<>();
+    private Catalogo cat = new Catalogo();
     private String serverName;
     private String serverType;
     private static ServerSocket SS;
     private String clienteAtual;
     private float pricePerHour;
 
-    private class Cliente {
+    private static class Cliente {
         private String email;
         private String password;
         private float value_to_pay;
@@ -52,9 +54,10 @@ public class ServidorStub implements interfaceGlobal {
 
     @Override
     public int registaCliente(String email, String pass) {
-        if (clientes.get(email) != null) return 1;
+        Cliente c;
+        if ((c = clientes.get(email)) != null) return 1;
         else {
-            Cliente c = new Cliente(email,pass);
+            c = new Cliente(email,pass);
             clientes.put(email,c);
             return 0;
         }

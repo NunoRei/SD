@@ -47,7 +47,22 @@ public class ClienteStub implements interfaceGlobal {
 
     @Override
     public int autenticaCliente (String email, String pass) {
-        return 1;
+        String pedido = "autentica ";
+        pedido+=email;
+        pedido+= " ";
+        pedido+=pass;
+
+        out.println(pedido);
+        out.flush();
+
+        String resposta = null;
+        try {
+            resposta = in.readLine();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return Integer.parseInt(resposta);
     }
     //Verifica palavra passe
     public boolean Verifica_Pass(String pass) {

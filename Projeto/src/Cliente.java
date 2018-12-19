@@ -18,27 +18,39 @@ public class Cliente {
 
             ClienteStub c = new ClienteStub();
 
-
+            /*
             System.out.println("Agora está conetado ao servidor principal");
             System.out.println("1 -> servers para reservar");
             System.out.println("2 -> servers para leiloar");
-            System.out.println("3 -> logout");
+            System.out.println("3 -> logout");*/
 
-            while (true) {
+            boolean f = true;
+
+            while (f) {
                 String s = System.console().readLine();
-                if(s.equals("3")) break;
-                if(s.equals("2")) {
-                    
+                String[] p = s.split(" ");
+                switch(p[0]) {
+                    case "regista":
+                        int reg = c.registaCliente(p[1], p[2]);
+                        if (reg == 0) System.out.println("Registado");
+                        break;
+                    case "autentica":
+                        int aut = c.autenticaCliente(p[1], p[2]);
+                        if (aut == 0) {
+                            System.out.println("Autenticado com sucesso");
+                            f = false;
+                        }
+                        break;
+                    default:
+                        System.out.println("Comando invalida.");
                 }
-                if(s.equals("1")) {
-                    
-                }
+            }
                 //out.println(s);
                 //String s1 = in.readLine();
                 //if(s1 == null) break;
                 //System.out.println(s1);
-            }
-            System.out.println("Logout realizado");
+
+            System.out.println("Acabou");
         //} 
         //else {
             //System.out.println("Credenciais inválidas!");
