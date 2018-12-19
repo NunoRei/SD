@@ -51,6 +51,18 @@ public class Servidor implements Runnable {
                         int resautentica = st.autenticaCliente(p[1], p[2]);
                         s = Integer.toString(resautentica);
                         break;
+                        
+                    case "servidor_Pedido":
+                        int resservPedido = st.reservarPorPedido(p[1], p[2]);
+                        s = resservPedido;
+                        break;
+
+                    //para aqui tem de indicar o nickname de utilizador, para ver se ja esta autenticado, o preço horário e indicar o tipo de servidor que quer reservar
+                    case "servidor_Leilao":
+                        int resservLeilao = st.reservarPorLeilao(p[1], p[2], p[3], ocupados);
+                        s = resservLeilao;
+                        break;
+                        
                     default:
                         System.out.println("Comando invalida.");
                 }

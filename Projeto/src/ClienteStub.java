@@ -64,6 +64,47 @@ public class ClienteStub implements interfaceGlobal {
         }
         return Integer.parseInt(resposta);
     }
+    
+     public int reservarPorPedido(String email, String type) {
+        String pedido = "servidor_Pedido ";
+        pedido+=email;
+        pedido+= " ";
+        pedido+=type;
+
+        out.println(pedido);
+        out.flush();
+
+        String resposta = null;
+        try {
+            resposta = in.readLine();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return Integer.parseInt(resposta);
+    }
+
+    public int reservarPorLeilao(String email, double quantia, String type) {
+        String pedido = "servidor_Leilao ";
+        pedido+=email;
+        pedido+= " ";
+        pedido+=quantia;
+        pedido+= " ";
+        pedido+=type;
+
+        out.println(pedido);
+        out.flush();
+
+        String resposta = null;
+        try {
+            resposta = in.readLine();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return Integer.parseInt(resposta);
+    }
+    
     //Verifica palavra passe
     public boolean Verifica_Pass(String pass) {
         return true;
