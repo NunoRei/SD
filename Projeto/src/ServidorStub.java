@@ -13,24 +13,30 @@ import java.util.Map;
  */
 
 public class ServidorStub implements interfaceGlobal {
-
     private Map<String, Cliente> clientes = new HashMap<>();
     private Catalogo cat = new Catalogo();
+    
     private String serverName;
     private String serverType;
+    
     private static ServerSocket SS;
     private String clienteAtual;
     private float pricePerHour;
+    
+    private BufferedReader in;
+    private PrintWriter out;
 
     private static class Cliente {
         private String email;
         private String password;
         private float value_to_pay;
+        private int conectado;
 
-        public Cliente(String email,String pass) {
+        public Cliente(String email,String pass){
             this.email = email;
             this.password = pass;
             this.value_to_pay = 0;
+            this.conectado = 0;
         }
 
         public String getPassword() {
@@ -43,6 +49,14 @@ public class ServidorStub implements interfaceGlobal {
 
         public float getValue_to_pay() {
             return value_to_pay;
+        }
+
+        public int getEstado(){
+            return this.conectado;
+        }
+
+        public void setEstado(int estado){
+            this.conectado = estado;
         }
     }
     /*
@@ -70,21 +84,42 @@ public class ServidorStub implements interfaceGlobal {
         if ((c = clientes.get(email)) == null) return 1;
         else if (c.getPassword().equals(pass)) return 0;
             else return 1;
+        this.clientes.get(c).setConectado(1);
     }
     
-     //ver se esta autenticado
-     //se correr bem, reserva e avisa o resto dos clientes
-     public String reservarPorPedido(String email, String tipo){
-        //if(autenticado){
-        
+    public String reservarPorPedido(String email, String tipo){
+        if(this.clientes.get(c).getEstado() == 1){
+            
+        }
     }
 
-    //ver se esta autenticado
-    //se correr bem, introduz no leilao e fica a espera de resposta
     public String reservarPorLeilao(String email, double preco, String tipo){
-
+        if(this.clientes.get(c).getEstado() == 1){
+            
+        }
     }
 
+    public void atribuirServidor(String email){
+        //this.users.lock();
+
+        for(Map.Entry<String,Socket> c : this.clientesConectados.entrySet()){
+                    name = c.getKey();
+           
+                    if(!name.equals(email)){
+                        in = new BufferedReader(new InputStreamReader(c.getValue().getInputStream()));
+                        out = new PrintWriter(c.getValue().getOutputStream());
+                        out.println("O servidor na posicao" + "foi atribuído a: " + email);
+                        out.flush();
+                    }
+                        else{
+                            in = new BufferedReader(new InputStreamReader(c.getValue().getInputStream()));
+                            out = new PrintWriter(c.getValue().getOutputStream());
+                            out.println("Foi-lhe atribuído o servidor que pretendia");
+                            out.flush();
+                        }
+                    }
+        //this.users.unlock();
+    }
 
     //Colocar o cliente no servidor
     public void addCliente(String nome) {
