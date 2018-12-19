@@ -11,6 +11,7 @@ import java.util.Map;
  *
  * @author João Marques, Nuno Rei e Jaime Leite
  */
+
 public class ServidorStub implements interfaceGlobal {
 
     private Map<String, Cliente> clientes = new HashMap<>();

@@ -2,6 +2,11 @@ import java.util.ArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ *
+ * @author João Marques, Nuno Rei e Jaime Leite
+ */
+
 public class Catalogo {
 
     private static class servidor {

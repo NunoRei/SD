@@ -6,10 +6,12 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
+
 /**
  *
  * @author João Marques, Nuno Rei e Jaime Leite
  */
+
 public class Cliente {
     //private final Map<String,Cliente> clientes;
     

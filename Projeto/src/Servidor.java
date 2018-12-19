@@ -7,10 +7,12 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+
 /**
  *
  * @author João Marques, Nuno Rei e Jaime Leite
  */
+
 public class Servidor implements Runnable {
 
     //private Servidor[] servidores = new Servidor[30]; //ports [1200;1229]
