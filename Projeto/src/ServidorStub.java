@@ -119,6 +119,7 @@ public class ServidorStub implements interfaceGlobal {
             while (true) {
                 String s = in.readLine();
                 if(s.equals("exit")) break;
+                //falta por aqui, penso eu, o caso do ele dizer que quer abandonar o servidor que obteve
                 out.println(s);
                 out.flush();
             }

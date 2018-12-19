@@ -22,6 +22,9 @@ public class ClienteStub implements interfaceGlobal {
         x = new Socket("localhost",12345);
         out = new PrintWriter(x.getOutputStream());
         in = new BufferedReader(new InputStreamReader(x.getInputStream()));
+            
+        Thread leitorCliente = new Thread(new Reader(socket,in,out));
+        leitorCliente.start();
     }
 
     //Criação de um Cliente
