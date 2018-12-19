@@ -70,6 +70,20 @@ public class ServidorStub implements interfaceGlobal {
         else if (c.getPassword().equals(pass)) return 0;
             else return 1;
     }
+    
+     //ver se esta autenticado
+     //se correr bem, reserva e avisa o resto dos clientes
+     public String reservarPorPedido(String email, String tipo){
+        //if(autenticado){
+        
+    }
+
+    //ver se esta autenticado
+    //se correr bem, introduz no leilao e fica a espera de resposta
+    public String reservarPorLeilao(String email, double preco, String tipo){
+
+    }
+
 
     //Colocar o cliente no servidor
     public void addCliente(String nome) {
