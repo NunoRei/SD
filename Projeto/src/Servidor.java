@@ -13,12 +13,12 @@ import java.net.Socket;
  * @author João Marques, Nuno Rei e Jaime Leite
  */
 
-public class Servidor implements Runnable {
-
+public class Servidor implements Runnable{
     //private Servidor[] servidores = new Servidor[30]; //ports [1200;1229]
-    private int[] ocupados = new int[30]; //0-> livre, 1-> ocupado, 2-> leilão
+    //private int[] ocupados = new int[30]; //0-> livre, 1-> ocupado, 2-> leilão
     private final Socket x;
     private ServidorStub st;
+    private Map<String, Socket> clientesConectados = new HashMap<>();
 
     public Servidor(Socket x, ServidorStub st) {
         this.x = x;
@@ -34,8 +34,7 @@ public class Servidor implements Runnable {
         }
     }
 
-    public void run() {
-
+    public void run(){
         try {
             PrintWriter out = new PrintWriter(x.getOutputStream());
             BufferedReader in = new BufferedReader(new InputStreamReader(x.getInputStream()));
@@ -50,6 +49,8 @@ public class Servidor implements Runnable {
                     case "autentica":
                         int resautentica = st.autenticaCliente(p[1], p[2]);
                         s = Integer.toString(resautentica);
+                        if(s == 0)
+                            this.clientesConectados.put(p[0],x);
                         break;
                         
                     case "servidor_Pedido":
@@ -59,7 +60,7 @@ public class Servidor implements Runnable {
 
                     //para aqui tem de indicar o nickname de utilizador, para ver se ja esta autenticado, o preço horário e indicar o tipo de servidor que quer reservar
                     case "servidor_Leilao":
-                        int resservLeilao = st.reservarPorLeilao(p[1], p[2], p[3], ocupados);
+                        int resservLeilao = st.reservarPorLeilao(p[1], p[2], p[3]);
                         s = resservLeilao;
                         break;
                         
