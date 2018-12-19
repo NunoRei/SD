@@ -41,6 +41,23 @@ public class Cliente {
                             f = false;
                         }
                         break;
+                        
+                    case "servidor_Pedido":
+                        int aut = c.reservarPorPedido(p[1], p[2]);
+                        if (aut == 0) {
+                            System.out.println("O seu pedido foi registado com sucesso");
+                            f = false;
+                        }
+                        break;
+
+                    case "servidor_Leilao":
+                        int aut = c.reservarPorLeilao(p[1], p[2], p[3]);
+                        if (aut == 0) {
+                            System.out.println("O seu pedido foi introduzido no leilão com sucesso");
+                            f = false;
+                        }
+                        break;
+                        
                     default:
                         System.out.println("Comando invalida.");
                 }
