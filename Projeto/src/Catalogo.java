@@ -8,7 +8,6 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 
 public class Catalogo{
-
     private static class servidor{
         private String id;
         private String type;
@@ -58,7 +57,7 @@ public class Catalogo{
     }
 
     //retorna uma posicao do array que esteja livre
-    public int existeServerType(String i){
+    public int existeServerType(String type){
         int i;
         for(i=0; i<this.servidores.size(); i++){
             if(this.servidores.get(i).getType().equals(i)) return i;
@@ -66,7 +65,29 @@ public class Catalogo{
         return -1;
     }
 
+    public int serverPedidoFree(){
+        int i;
+        for(i=0; i<this.servidores.size(); i++)
+            if(servidores.get(i).getEstado() == 0) return 0;
+        return 1;
+    }
+
+    public int serverLeilaoFree(){
+        int i;
+        for(i=0; i<this.servidores.size(); i++)
+            if(servidores.get(i).getEstado() == 2) return 0;
+        return 1;
+    }
+
     public ArrayList<servidor> getCatalogo(){
         return this.servidores;
+    }
+
+    public void lock(){
+        this.ls.lock();
+    }
+
+    public void unlock(){
+        this.ls.unlock();
     }
 }
