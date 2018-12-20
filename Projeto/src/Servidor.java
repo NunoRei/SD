@@ -20,7 +20,7 @@ public class Servidor implements Runnable{
     private ServidorStub st;
     private Map<String, Socket> clientesConectados = new HashMap<>();
 
-    public Servidor(Socket x, ServidorStub st) {
+    public Servidor(Socket x, ServidorStub st){
         this.x = x;
         this.st = st;
     }
@@ -54,7 +54,7 @@ public class Servidor implements Runnable{
                         break;
                         
                     case "servidor_Pedido":
-                        int resservPedido = st.reservarPorPedido(p[1], p[2]);
+                        String resservPedido = st.reservarPorPedido(p[1], p[2]);
                         s = resservPedido;
                         break;
 
