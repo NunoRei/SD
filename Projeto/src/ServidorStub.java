@@ -31,12 +31,15 @@ public class ServidorStub implements interfaceGlobal {
         private String password;
         private float value_to_pay;
         private int conectado;
+        private int conectado();
 
         public Cliente(String email,String pass){
             this.email = email;
             this.password = pass;
             this.value_to_pay = 0;
             this.conectado = 0;
+            //se lhe foi atribuido um servidor, tem indice >= 0, senão tem índice -1
+            this.temServidor = 0;
         }
 
         public String getPassword() {
@@ -57,6 +60,10 @@ public class ServidorStub implements interfaceGlobal {
 
         public void setEstado(int estado){
             this.conectado = estado;
+        }
+
+        public int getServidor(){
+            return this.temServidor;
         }
     }
     /*
@@ -87,15 +94,23 @@ public class ServidorStub implements interfaceGlobal {
         this.clientes.get(c).setConectado(1);
     }
     
-    public String reservarPorPedido(String email, String tipo){
-        if(this.clientes.get(c).getEstado() == 1){
-            
+    //tipo: 0 ou 2
+    //retorna 0 se atribui ou 1 se nao foi atribuido
+    public int reservarPorPedido(String email, int type){
+        if(this.clientes.get(email).getEstado() == 1){
+            //se existe disponivel
+            if(cat.existeServerType(type){
+               //ir ao array de servidores e mudar o estado daquele que reservei 
+            }
         }
     }
 
-    public String reservarPorLeilao(String email, double preco, String tipo){
+    public String reservarPorLeilao(String email, double preco, int type){
         if(this.clientes.get(c).getEstado() == 1){
-            
+            if(cat.existeServerType(type) == 1) System.out.println("De momento não existem servidores desse tipo disponíveis");
+            else{
+                System.out.println("Foi-lhe atribuído o serveidor desejado");
+            }
         }
     }
 
