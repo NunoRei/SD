@@ -7,9 +7,9 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author João Marques, Nuno Rei e Jaime Leite
  */
 
-public class Catalogo {
+public class Catalogo{
 
-    private static class servidor {
+    private static class servidor{
         private String id;
         private String type;
         private Double preco;
@@ -17,21 +17,21 @@ public class Catalogo {
         Lock ls = new ReentrantLock();
 
         //estado 1 a ser usado e 0 a nao ser usado
-        private servidor(String id, String type, Double preco, int estado) {
+        private servidor(String id, String type, Double preco, int estado){
             this.id = id;
             this.type = type;
             this.preco = preco;
         }
 
-        public String getId() {
+        public String getId(){
             return this.id;
         }
 
-        public String getType() {
+        public String getType(){
             return this.type;
         }
 
-        public Double getPreco() {
+        public Double getPreco(){
             return preco;
         }
 
@@ -44,11 +44,20 @@ public class Catalogo {
     //private ArrayList<servidor> pedido = new ArrayList<>();
     private Lock l = new ReentrantLock();
 
-    public Catalogo() {
+    //0 se esta para ser reservado a pedido; 1 se esta a ser usado; 2 se esta para ser reservado em leilao
+    public Catalogo(){
         servidores.add(new servidor("t3.micro","micro",0.99,0));
         servidores.add(new servidor("t3.large","large",1.50,0));
-        servidores.add(new servidor("m5.micro","micro",0.50,0));
-        servidores.add(new servidor("m5.large","large",1.00,0));
+        servidores.add(new servidor("m5.micro","micro",0.50,2));
+        servidores.add(new servidor("m5.large","large",1.00,2));
+    }
+
+    public int existeServerType(int i){
+        int i;
+        for(i=0; i<this.servidores.size(); i++){
+            if(this.servidores.get(i).getType() == i) return 0;
+        }
+        return 1;
     }
 
     public ArrayList<servidor> getCatalogo(){
