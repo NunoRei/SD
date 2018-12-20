@@ -41,7 +41,7 @@ public class Servidor implements Runnable{
             while (true) {
                 String s = in.readLine();
                 String[] p = s.split(" ");
-                switch(p[0]) {
+                switch(p[0]){
                     case "regista":
                         int resregista = st.registaCliente(p[1], p[2]);
                         s = Integer.toString(resregista);
@@ -54,14 +54,19 @@ public class Servidor implements Runnable{
                         break;
                         
                     case "servidor_Pedido":
-                        String resservPedido = st.reservarPorPedido(p[1], p[2]);
-                        s = resservPedido;
+                        //caso esteja conectado
+                        if(clientesConectados.contains(p[0])){
+                            String resservPedido = st.reservarPorPedido(p[1], p[2]);
+                            s = resservPedido;
+                        }
                         break;
 
                     //para aqui tem de indicar o nickname de utilizador, para ver se ja esta autenticado, o preço horário e indicar o tipo de servidor que quer reservar
                     case "servidor_Leilao":
-                        int resservLeilao = st.reservarPorLeilao(p[1], p[2], p[3]);
-                        s = resservLeilao;
+                        if(clientesConectados.contains(p[0])){
+                            int resservLeilao = st.reservarPorLeilao(p[1], p[2], p[3]);
+                            s = resservLeilao;
+                        }
                         break;
                         
                     default:
