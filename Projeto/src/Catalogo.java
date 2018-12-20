@@ -21,6 +21,7 @@ public class Catalogo{
             this.id = id;
             this.type = type;
             this.preco = preco;
+            this.estado = estado;
         }
 
         public String getId(){
@@ -38,6 +39,10 @@ public class Catalogo{
         public int getEstado(){
             return estado;
         }
+
+        public void setEstado(int i){
+            this.estado = i;
+        }
     }
 
     private ArrayList<servidor> servidores = new ArrayList<>();
@@ -52,12 +57,13 @@ public class Catalogo{
         servidores.add(new servidor("m5.large","large",1.00,2));
     }
 
+    //retorna uma posicao do array que esteja livre
     public int existeServerType(String i){
         int i;
         for(i=0; i<this.servidores.size(); i++){
-            if(this.servidores.get(i).getType().equals(i)) return 0;
+            if(this.servidores.get(i).getType().equals(i)) return i;
         }
-        return 1;
+        return -1;
     }
 
     public ArrayList<servidor> getCatalogo(){
