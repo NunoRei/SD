@@ -52,10 +52,10 @@ public class Catalogo{
         servidores.add(new servidor("m5.large","large",1.00,2));
     }
 
-    public int existeServerType(int i){
+    public int existeServerType(String i){
         int i;
         for(i=0; i<this.servidores.size(); i++){
-            if(this.servidores.get(i).getType() == i) return 0;
+            if(this.servidores.get(i).getType().equals(i)) return 0;
         }
         return 1;
     }
