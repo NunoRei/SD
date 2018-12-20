@@ -12,8 +12,10 @@ import java.util.Map;
  * @author João Marques, Nuno Rei e Jaime Leite
  */
 
-public class ServidorStub implements interfaceGlobal {
+public class ServidorStub implements interfaceGlobal{
     private Map<String, Cliente> clientes = new HashMap<>();
+    //clientes conectados e que pretendem obtrer servidor em leilao
+    private Map<String, Socket> clientesLeilao = new HashMap<>();
     private Catalogo cat = new Catalogo();
     
     private String serverName;
@@ -37,7 +39,7 @@ public class ServidorStub implements interfaceGlobal {
             this.email = email;
             this.password = pass;
             this.value_to_pay = 0;
-            this.conectado = 0;
+            //this.conectado = 0;
             //se lhe foi atribuido um servidor, tem indice >= 0, senão tem índice -1
             this.temServidor = -1;
         }
@@ -95,13 +97,12 @@ public class ServidorStub implements interfaceGlobal {
         if ((c = clientes.get(email)) == null) return 1;
         else if (c.getPassword().equals(pass)) return 0;
             else return 1;
-        this.clientes.get(c).setConectado(1);
+        //this.clientes.get(c).setConectado(1);
     }
     
     //tipo: 0 ou 2
     //retorna 0 se atribui ou 1 se nao foi atribuido
     public int reservarPorPedido(String email, String type){
-        if(this.clientes.get(email).getEstado() == 1){
             if(cat.existeServerType(type) == -1) System.out.println("De momento não existem servidores desse tipo disponíveis");
             else{
                 resultado = cat.existeServerType(type);
@@ -114,13 +115,16 @@ public class ServidorStub implements interfaceGlobal {
                 //no array de servidores, mudar o estado para ocupado do servidor atribuido ao nosso cliente
                 cat.setState();
             }
-        }
     }
 
     public String reservarPorLeilao(String email, double preco, int type){
-        if(this.clientes.get(c).getEstado() == 1){
+        String resposta = "Nao existem servidores desse tipo disponiveis para leilao";
+        //caso haja "servidores para leiloar" livres
+        if(cat.serverLeilaoFree() == 0){
             
         }
+        
+        return resposta;
     }
 
     public void atribuirServidor(String email){
