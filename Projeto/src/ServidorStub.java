@@ -39,7 +39,7 @@ public class ServidorStub implements interfaceGlobal {
             this.value_to_pay = 0;
             this.conectado = 0;
             //se lhe foi atribuido um servidor, tem indice >= 0, senão tem índice -1
-            this.temServidor = 0;
+            this.temServidor = -1;
         }
 
         public String getPassword() {
@@ -64,6 +64,10 @@ public class ServidorStub implements interfaceGlobal {
 
         public int getServidor(){
             return this.temServidor;
+        }
+
+        public setServidor(int i){
+            this.temServidor = i;
         }
     }
     /*
@@ -96,21 +100,26 @@ public class ServidorStub implements interfaceGlobal {
     
     //tipo: 0 ou 2
     //retorna 0 se atribui ou 1 se nao foi atribuido
-    public int reservarPorPedido(String email, int type){
+    public int reservarPorPedido(String email, String type){
         if(this.clientes.get(email).getEstado() == 1){
-            //se existe disponivel
-            if(cat.existeServerType(type){
-               //ir ao array de servidores e mudar o estado daquele que reservei 
+            if(cat.existeServerType(type) == -1) System.out.println("De momento não existem servidores desse tipo disponíveis");
+            else{
+                resultado = cat.existeServerType(type);
+
+                //indica no cliente a posicao no array do servidor que lhe foi atribuido
+                this.clientes.get(email).setServidor(resultado);
+                
+                System.out.println("Foi-lhe atribuído o servidor desejado");
+                atribuirServidor(email);
+                //no array de servidores, mudar o estado para ocupado do servidor atribuido ao nosso cliente
+                cat.setState();
             }
         }
     }
 
     public String reservarPorLeilao(String email, double preco, int type){
         if(this.clientes.get(c).getEstado() == 1){
-            if(cat.existeServerType(type) == 1) System.out.println("De momento não existem servidores desse tipo disponíveis");
-            else{
-                System.out.println("Foi-lhe atribuído o serveidor desejado");
-            }
+            
         }
     }
 
