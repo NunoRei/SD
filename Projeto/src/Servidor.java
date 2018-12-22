@@ -72,16 +72,15 @@ public class Servidor implements Runnable{
                     //caso em que o cliente escreve exit para sair so sistema
                     case "exit":
                         if(this.clientesConectados.contains(p[1])){
-                            String pretendeSair = st.retiraServidor(p[1]);
+                            String pretendeSairExit = st.retiraServidor(p[1]);
                             s = pretendeSair;
                         }
                         break;
 
                     //caso em que o cliente faz contol+C
                     case null:
-                        //falta remover o cliente do map de clientes conectados, obtendo antes o seu nickname para aplicar o metodo retiraServidor
-                        
-                            String resservLeilao = st.reservarPorLeilao(nickname);
+                            //variavel nickname reulta de ir ao map de clientes conectados e ficar com a key do socket em questao
+                            String resservLeilao = st.retiraServidor(nickname);
                             s = resservLeilao;
                         }
                         break;
@@ -93,7 +92,7 @@ public class Servidor implements Runnable{
                 out.println(s);
                 out.flush();
                 //a parte de remover o cliente tem de ser aqui, senao perde-se o socket e nao se consegue fazer o println e o flush
-                if(p[1].equals) this.clientesConectados.remove(p[1]);
+                if(p[0].equals("exit") || (s == null)) this.clientesConectados.remove(p[1]);
             }
             //out.close();
             //x.close();
