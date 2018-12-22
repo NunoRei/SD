@@ -102,9 +102,12 @@ public class ServidorStub implements interfaceGlobal{
     
     //tipo: 0 ou 2
     //retorna 0 se atribui ou 1 se nao foi atribuido
-    public int reservarPorPedido(String email, String type){
+    public String reservarPorPedido(String email, String type){
+            String resposta1 = "De momento não existem servidores desse tipo disponíveis";
+            String resposta2 = "Foi-lhe atribuído o servidor desejado";
+            
             this.cat.lock();
-            if(this.cat.existeServerPedido(type) < 0) System.out.println("De momento não existem servidores desse tipo disponíveis");
+            if(this.cat.existeServerPedido(type) < 0) return resposta1;
             else{
                 //resultado guarda a posicao em que esta o servidor livre que vai ser reservado
                 int resultado = cat.existeServerPedido(type);
@@ -112,12 +115,12 @@ public class ServidorStub implements interfaceGlobal{
                 //indica no cliente a posicao no array do servidor que lhe foi atribuido
                 this.clientes.get(email).setServidor(resultado);
                 
-                System.out.println("Foi-lhe atribuído o servidor desejado");
                 atribuirServidor(email);
                 //no array de servidores, mudar o estado para ocupado do servidor atribuido ao nosso cliente
                 this.cat.setOcupied(resultado,1);
             }
             this.cat.unlock();
+            return resposta2;
     }
 
     public String reservarPorLeilao(String email, double preco, int type){
@@ -130,15 +133,15 @@ public class ServidorStub implements interfaceGlobal{
         return resposta;
     }
 
-    public String retiraServidor(String email){
-           String msg = "O seu servidor está disponível para os outros clientes";
+    //cliente quer sair, usando um exit
+    public int retiraServidorExit(String email){
            int i = this.clientes.get(email).getServidor();
 
            this.clientes.get(email).setServidor(-1);
            //falta saber se o servidor que passa a estar disponivel fica com o tipo 0 ou 2
            this.cat.get(i).setEstado(...);
 
-           return msg;
+           return 0;
     }
 
     /*public void atribuirServidor(String email){
