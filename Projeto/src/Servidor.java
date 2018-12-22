@@ -38,7 +38,7 @@ public class Servidor implements Runnable{
         try {
             PrintWriter out = new PrintWriter(x.getOutputStream());
             BufferedReader in = new BufferedReader(new InputStreamReader(x.getInputStream()));
-            while (true) {
+            while (true){
                 String s = in.readLine();
                 String[] p = s.split(" ");
                 switch(p[0]){
@@ -55,7 +55,7 @@ public class Servidor implements Runnable{
                         
                     case "servidor_Pedido":
                         //caso esteja conectado
-                        if(clientesConectados.contains(p[0])){
+                        if(this.clientesConectados.contains(p[1])){
                             String resservPedido = st.reservarPorPedido(p[1], p[2]);
                             s = resservPedido;
                         }
@@ -63,22 +63,40 @@ public class Servidor implements Runnable{
 
                     //para aqui tem de indicar o nickname de utilizador, para ver se ja esta autenticado, o preço horário e indicar o tipo de servidor que quer reservar
                     case "servidor_Leilao":
-                        if(clientesConectados.contains(p[0])){
+                        if(this.clientesConectados.contains(p[1])){
                             int resservLeilao = st.reservarPorLeilao(p[1], p[2], p[3]);
                             s = resservLeilao;
                         }
                         break;
+                    
+                    //caso em que o cliente escreve exit para sair so sistema
+                    case "exit":
+                        if(this.clientesConectados.contains(p[1])){
+                            String pretendeSair = st.retiraServidor(p[1]);
+                            s = pretendeSair;
+                        }
+                        break;
+
+                    //caso em que o cliente faz contol+C
+                    case null:
+                        //falta remover o cliente do map de clientes conectados, obtendo antes o seu nickname para aplicar o metodo retiraServidor
                         
+                            String resservLeilao = st.reservarPorLeilao(nickname);
+                            s = resservLeilao;
+                        }
+                        break;
+
                     default:
                         System.out.println("Comando invalida.");
                 }
                 //if (s.equals("3")) break;
                 out.println(s);
                 out.flush();
+                //a parte de remover o cliente tem de ser aqui, senao perde-se o socket e nao se consegue fazer o println e o flush
+                if(p[1].equals) this.clientesConectados.remove(p[1]);
             }
             //out.close();
             //x.close();
-        }
         catch (Exception e){
             e.printStackTrace();
         }
