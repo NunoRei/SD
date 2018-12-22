@@ -103,9 +103,11 @@ public class ServidorStub implements interfaceGlobal{
     //tipo: 0 ou 2
     //retorna 0 se atribui ou 1 se nao foi atribuido
     public int reservarPorPedido(String email, String type){
-            if(cat.existeServerType(type) == -1) System.out.println("De momento não existem servidores desse tipo disponíveis");
+            this.cat.lock();
+            if(this.cat.existeServerPedido(type) < 0) System.out.println("De momento não existem servidores desse tipo disponíveis");
             else{
-                resultado = cat.existeServerType(type);
+                //resultado guarda a posicao em que esta o servidor livre que vai ser reservado
+                int resultado = cat.existeServerPedido(type);
 
                 //indica no cliente a posicao no array do servidor que lhe foi atribuido
                 this.clientes.get(email).setServidor(resultado);
@@ -113,21 +115,33 @@ public class ServidorStub implements interfaceGlobal{
                 System.out.println("Foi-lhe atribuído o servidor desejado");
                 atribuirServidor(email);
                 //no array de servidores, mudar o estado para ocupado do servidor atribuido ao nosso cliente
-                cat.setState();
+                this.cat.setOcupied(resultado,1);
             }
+            this.cat.unlock();
     }
 
     public String reservarPorLeilao(String email, double preco, int type){
         String resposta = "Nao existem servidores desse tipo disponiveis para leilao";
         //caso haja "servidores para leiloar" livres
-        if(cat.serverLeilaoFree() == 0){
+        if(cat.existeServidorLeilao() >= 0){
             
         }
         
         return resposta;
     }
 
-    public void atribuirServidor(String email){
+    public String retiraServidor(String email){
+           String msg = "O seu servidor está disponível para os outros clientes";
+           int i = this.clientes.get(email).getServidor();
+
+           this.clientes.get(email).setServidor(-1);
+           //falta saber se o servidor que passa a estar disponivel fica com o tipo 0 ou 2
+           this.cat.get(i).setEstado(...);
+
+           return msg;
+    }
+
+    /*public void atribuirServidor(String email){
         //this.users.lock();
 
         for(Map.Entry<String,Socket> c : this.clientesConectados.entrySet()){
@@ -148,6 +162,7 @@ public class ServidorStub implements interfaceGlobal{
                     }
         //this.users.unlock();
     }
+    */
 
     //Colocar o cliente no servidor
     public void addCliente(String nome) {
@@ -171,7 +186,7 @@ public class ServidorStub implements interfaceGlobal{
     
     //Enquanto o cliente estiver a escrever para o servidor
     //Falta colocar Times para calcular o tempo que o cliente esteve no servidor para adicionar há sua dívida
-    public float init(int port) throws IOException {
+    /*public float init(int port) throws IOException {
         SS = new ServerSocket(port);
         Socket x;
         //Time timeInicio = Time.now();
@@ -195,4 +210,5 @@ public class ServidorStub implements interfaceGlobal{
         float price = 0;//(toHours(timeFim) - toHours(timeInicio))*pricePerHour;
         return price;
     }
+    */
 }
