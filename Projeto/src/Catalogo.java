@@ -32,11 +32,11 @@ public class Catalogo{
         }
 
         public Double getPreco(){
-            return preco;
+            return this.preco;
         }
 
         public int getEstado(){
-            return estado;
+            return this.estado;
         }
 
         public void setEstado(int i){
@@ -57,30 +57,39 @@ public class Catalogo{
     }
 
     //retorna uma posicao do array que esteja livre
-    public int existeServerType(String type){
+    //indica se existe um servidor daquele tipo disponivel para reserva a pedido
+    public int existeServerPedido(String type){
         int i;
         for(i=0; i<this.servidores.size(); i++){
-            if(this.servidores.get(i).getType().equals(i)) return i;
+            if(this.servidores.get(i).getType().equals(type) && this.servidores.get(i).getEstado() == 0) return i;
         }
         return -1;
     }
 
-    public int serverPedidoFree(){
+    //retorna uma posicao do array que esteja livre
+    //indica se existe um servidor daquele tipo disponivel para reserva a leilao
+    public int existeServerLeilao(String type){
         int i;
-        for(i=0; i<this.servidores.size(); i++)
-            if(servidores.get(i).getEstado() == 0) return 0;
-        return 1;
-    }
-
-    public int serverLeilaoFree(){
-        int i;
-        for(i=0; i<this.servidores.size(); i++)
-            if(servidores.get(i).getEstado() == 2) return 0;
-        return 1;
+        for(i=0; i<this.servidores.size(); i++){
+            if(this.servidores.get(i).getType().equals(type) && this.servidores.get(i).getEstado() == 2) return i;
+        }
+        return -1;
     }
 
     public ArrayList<servidor> getCatalogo(){
         return this.servidores;
+    }
+
+    /*muda a disponibilidade de um servidor no array de servidores: 1 se passa a estar ocupado; 0 ou 2 se volta a estar livre 
+        para ser reservado por pedido ou por leilao, respetivamente
+    */ 
+    public void setOcupied(int posicao, int novoEstado){
+        this.get(posicao).setEstado(novoEstado);
+    }
+
+    //metodo para indicar que um servidor passa a estar livre
+    public void setFree(int posicao, int novoEstado){
+        this.get(posicao).setEstado(novoEstado);  
     }
 
     public void lock(){
