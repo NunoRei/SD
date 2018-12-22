@@ -8,8 +8,7 @@ import java.net.Socket;
  *
  * @author João Marques, Nuno Rei e Jaime Leite
  */
-public class ClienteStub implements interfaceGlobal {
-
+public class ClienteStub implements interfaceGlobal{
     private final Socket x;
     private final PrintWriter out;
     private final BufferedReader in;
@@ -18,7 +17,7 @@ public class ClienteStub implements interfaceGlobal {
     private String password;
     private float value_to_pay;*/
 
-    public ClienteStub () throws Exception {
+    public ClienteStub() throws Exception{
         x = new Socket("localhost",12345);
         out = new PrintWriter(x.getOutputStream());
         in = new BufferedReader(new InputStreamReader(x.getInputStream()));
@@ -29,7 +28,7 @@ public class ClienteStub implements interfaceGlobal {
 
     //Criação de um Cliente
     @Override
-    public int registaCliente (String email, String pass) {
+    public int registaCliente(String email, String pass){
         String pedido = "regista ";
         pedido+=email;
         pedido+= " ";
@@ -49,7 +48,7 @@ public class ClienteStub implements interfaceGlobal {
     }
 
     @Override
-    public int autenticaCliente (String email, String pass) {
+    public int autenticaCliente(String email, String pass){
         String pedido = "autentica ";
         pedido+=email;
         pedido+= " ";
@@ -68,7 +67,7 @@ public class ClienteStub implements interfaceGlobal {
         return Integer.parseInt(resposta);
     }
     
-     public int reservarPorPedido(String email, String type) {
+     public int reservarPorPedido(String email, String type){
         String pedido = "servidor_Pedido ";
         pedido+=email;
         pedido+= " ";
@@ -87,7 +86,7 @@ public class ClienteStub implements interfaceGlobal {
         return Integer.parseInt(resposta);
     }
 
-    public int reservarPorLeilao(String email, double quantia, String type) {
+    public int reservarPorLeilao(String email, double quantia, String type){
         String pedido = "servidor_Leilao ";
         pedido+=email;
         pedido+= " ";
@@ -107,9 +106,42 @@ public class ClienteStub implements interfaceGlobal {
         }
         return Integer.parseInt(resposta);
     }
+
+    public int retiraServidorExit(String email){
+        String pedido = "exit ";
+        pedido+=email;
+
+        out.println(pedido);
+        out.flush();
+
+        String resposta = null;
+        try {
+            resposta = in.readLine();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return Integer.parseInt(resposta);
+    }
+
+    public int retiraServidorNull(){
+        String pedido = null;
+
+        out.println(pedido);
+        out.flush();
+
+        String resposta = null;
+        try {
+            resposta = in.readLine();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return Integer.parseInt(resposta);
+    }
     
     //Verifica palavra passe
-    public boolean Verifica_Pass(String pass) {
+    public boolean Verifica_Pass(String pass){
         return true;
         /*return this.password.equals(pass);*/
     }
