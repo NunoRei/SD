@@ -12,10 +12,10 @@ import java.util.Map;
  * @author João Marques, Nuno Rei e Jaime Leite
  */
 
-public class Cliente {
+public class Cliente{
     //private final Map<String,Cliente> clientes;
     
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception{
         //if(true == ValidaCliente(args[0],args[1])) {
 
             ClienteStub c = new ClienteStub();
@@ -59,9 +59,22 @@ public class Cliente {
                             f = false;
                         }
                         break;
-                        
+                    
+                    case "exit":
+                            int pretendeSairExit = st.retiraServidor(p[1]);
+                            if(pretendeSairExit == 0)
+                                System.out.println("Logout efetuado com sucesso");
+                        break;
+
+                    //caso em que o cliente faz contol+C
+                    case null:
+                            int pretendeSairNull = st.retiraServidorNull();
+                             if(pretendeSairNull == 0)
+                                System.out.println("Logout efetuado com sucesso");
+                        break;
+
                     default:
-                        System.out.println("Comando invalida.");
+                        System.out.println("Comando invalido.");
                 }
             }
                 //out.println(s);
