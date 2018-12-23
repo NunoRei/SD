@@ -101,30 +101,38 @@ public class ServidorStub implements interfaceGlobal{
     }
     
     //tipo: 0 ou 2
-    //retorna 0 se atribui ou 1 se nao foi atribuido
-    public String reservarPorPedido(String email, String type){
-            String resposta1 = "De momento não existem servidores desse tipo disponíveis";
-            String resposta2 = "Foi-lhe atribuído o servidor desejado";
+    //retorna 0 se fica com servidor pretendido e 1 caso contrario
+    //se nao consegue reservar, vai para fila de espera até que chegue a sua vez de obter um servidor
+    public int reservarPorPedido(String email, String type){
+            //String resposta1 = "De momento não existem servidores desse tipo disponíveis";
+            //String resposta2 = "Foi-lhe atribuído o servidor desejado";
             
             this.cat.lock();
+            //se nao existe servidor que cliente pretende
             if(this.cat.existeServerPedido(type) < 0) return resposta1;
             else{
-                //resultado guarda a posicao em que esta o servidor livre que vai ser reservado
+                //resultado guarda a posicao em que está o servidor livre que vai ser atribuído ao cliente
                 int resultado = cat.existeServerPedido(type);
 
                 //indica no cliente a posicao no array do servidor que lhe foi atribuido
                 this.clientes.get(email).setServidor(resultado);
                 
+                //nao sei se este metodo está bem, mas faz sentido avisar toda a gente que está conectada quando se atrui um servidor 
                 atribuirServidor(email);
+                
                 //no array de servidores, mudar o estado para ocupado do servidor atribuido ao nosso cliente
                 this.cat.setOcupied(resultado,1);
             }
             this.cat.unlock();
-            return resposta2;
+            return 0;
     }
 
-    public String reservarPorLeilao(String email, double preco, int type){
-        String resposta = "Nao existem servidores desse tipo disponiveis para leilao";
+    //metodo chamado quando um cliente quer iniciar ou entrar num leilao por um servidor
+    //retorna 0 se cliente consegue iniciar ou entrar num leilao 
+    //retorna 1 se n houver servidores daquele tipo disponiveis para leilao
+    public int reservarPorLeilao(String email, double preco, int type){
+        //String resposta = "Nao existem servidores desse tipo disponiveis para leilao";
+        
         //caso haja "servidores para leiloar" livres
         if(cat.existeServidorLeilao() >= 0){
             
@@ -134,38 +142,20 @@ public class ServidorStub implements interfaceGlobal{
     }
 
     //cliente quer sair, usando um exit
+    // retorna 0, caso em que corre tudo bem quando cliente quer sair do sistema
     public int retiraServidorExit(String email){
+           //obter a posicao do array de servidores que corresponde ao servidor pertencente ao cliente com o nickname email
            int i = this.clientes.get(email).getServidor();
-
+           
+           //como o cliente vai "devolver" o servidor, fica sem nenhum servidor do array de servidores, ou seja, o atributo temServidor(no cliente) passa a ser -1
            this.clientes.get(email).setServidor(-1);
+            
+           //colocar servidor novamente disponível(penso que basta por o seu indice valido)
            //falta saber se o servidor que passa a estar disponivel fica com o tipo 0 ou 2
            this.cat.get(i).setEstado(...);
 
            return 0;
     }
-
-    /*public void atribuirServidor(String email){
-        //this.users.lock();
-
-        for(Map.Entry<String,Socket> c : this.clientesConectados.entrySet()){
-                    name = c.getKey();
-           
-                    if(!name.equals(email)){
-                        in = new BufferedReader(new InputStreamReader(c.getValue().getInputStream()));
-                        out = new PrintWriter(c.getValue().getOutputStream());
-                        out.println("O servidor na posicao" + "foi atribuído a: " + email);
-                        out.flush();
-                    }
-                        else{
-                            in = new BufferedReader(new InputStreamReader(c.getValue().getInputStream()));
-                            out = new PrintWriter(c.getValue().getOutputStream());
-                            out.println("Foi-lhe atribuído o servidor que pretendia");
-                            out.flush();
-                        }
-                    }
-        //this.users.unlock();
-    }
-    */
 
     //Colocar o cliente no servidor
     public void addCliente(String nome) {
