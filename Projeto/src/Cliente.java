@@ -60,8 +60,12 @@ public class Cliente{
                         }
                         break;
                     
+                    /*nao sei se é preciso fazer dois metodos distintos(retiraServidorExit e retiraServidorNull), 
+                    mas fiz so para garantir a distincao entre "exit" e Control+C
+                    */
                     case "exit":
-                            int pretendeSairExit = st.retiraServidor(p[1]);
+                            //p[1] é o nickname do cliente
+                            int pretendeSairExit = st.retiraServidorExit(p[1]);
                             if(pretendeSairExit == 0)
                                 System.out.println("Logout efetuado com sucesso");
                         break;
