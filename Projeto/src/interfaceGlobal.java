@@ -1,5 +1,4 @@
 /**
- *
  * @author João Marques, Nuno Rei e Jaime Leite
  */
 
