@@ -13,9 +13,12 @@ import java.util.Map;
  */
 
 public class ServidorStub implements interfaceGlobal{
+    //map que contem clientes autenticados no sistema
     private Map<String, Cliente> clientes = new HashMap<>();
     //clientes conectados e que pretendem obtrer servidor em leilao
     private Map<String, Socket> clientesLeilao = new HashMap<>();
+    //clientes conectados e à espera, que pretendem obter servidor por pedido 
+    private Map<String, Socket> clientesPedido = new HashMap<>();
     private Catalogo cat = new Catalogo();
     
     private String serverName;
@@ -33,7 +36,7 @@ public class ServidorStub implements interfaceGlobal{
         private String password;
         private float value_to_pay;
         private int conectado;
-        private int conectado();
+        private int temServidor;
 
         public Cliente(String email,String pass){
             this.email = email;
@@ -68,7 +71,7 @@ public class ServidorStub implements interfaceGlobal{
             return this.temServidor;
         }
 
-        public setServidor(int i){
+        public void setServidor(int i){
             this.temServidor = i;
         }
     }
@@ -108,8 +111,13 @@ public class ServidorStub implements interfaceGlobal{
             //String resposta2 = "Foi-lhe atribuído o servidor desejado";
             
             this.cat.lock();
-            //se nao existe servidor que cliente pretende
-            if(this.cat.existeServerPedido(type) < 0) return resposta1;
+            //se nao existe servidor que cliente pretende, cliente vai para fila de espera de clientes na mesma situacao(reservar servidor a pedido)
+            if(this.cat.existeServerPedido(type) < 0){
+                //introduzir cliente na fila de espera
+
+                return 0;
+            }
+
             else{
                 //resultado guarda a posicao em que está o servidor livre que vai ser atribuído ao cliente
                 int resultado = cat.existeServerPedido(type);
@@ -118,7 +126,7 @@ public class ServidorStub implements interfaceGlobal{
                 this.clientes.get(email).setServidor(resultado);
                 
                 //nao sei se este metodo está bem, mas faz sentido avisar toda a gente que está conectada quando se atrui um servidor 
-                atribuirServidor(email);
+                //atribuirServidor(email);
                 
                 //no array de servidores, mudar o estado para ocupado do servidor atribuido ao nosso cliente
                 this.cat.setOcupied(resultado,1);
@@ -127,18 +135,18 @@ public class ServidorStub implements interfaceGlobal{
             return 0;
     }
 
-    //metodo chamado quando um cliente quer iniciar ou entrar num leilao por um servidor
-    //retorna 0 se cliente consegue iniciar ou entrar num leilao 
-    //retorna 1 se n houver servidores daquele tipo disponiveis para leilao
-    public int reservarPorLeilao(String email, double preco, int type){
+    /*metodo chamado quando um cliente quer iniciar ou entrar num leilao por um servidor
+      retorna 0 se cliente consegue iniciar ou entrar num leilao 
+      retorna 1 se n houver servidores daquele tipo disponiveis para leilao*/
+    public int reservarPorLeilao(String email, double preco, String type){
         //String resposta = "Nao existem servidores desse tipo disponiveis para leilao";
         
         //caso haja "servidores para leiloar" livres
-        if(cat.existeServidorLeilao() >= 0){
+        if(this.cat.existeServerLeilao(type) >= 0){
             
         }
         
-        return resposta;
+        return 0;
     }
 
     //cliente quer sair, usando um exit
@@ -152,7 +160,7 @@ public class ServidorStub implements interfaceGlobal{
             
            //colocar servidor novamente disponível(penso que basta por o seu indice valido)
            //falta saber se o servidor que passa a estar disponivel fica com o tipo 0 ou 2
-           this.cat.get(i).setEstado(...);
+           //this.cat.get(i).setEstado(...);
 
            return 0;
     }
