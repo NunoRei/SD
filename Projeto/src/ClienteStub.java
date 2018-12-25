@@ -22,7 +22,7 @@ public class ClienteStub implements interfaceGlobal{
         out = new PrintWriter(x.getOutputStream());
         in = new BufferedReader(new InputStreamReader(x.getInputStream()));
             
-        Thread leitorCliente = new Thread(new Reader(socket,in,out));
+        Thread leitorCliente = new Thread(new Reader(x,in,out));
         leitorCliente.start();
     }
 
