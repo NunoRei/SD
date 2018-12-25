@@ -13,7 +13,6 @@ public class Catalogo{
         private String type;
         private Double preco;
         private int estado;
-        Lock ls = new ReentrantLock();
 
         //estado 1 a ser usado e 0 a nao ser usado
         private servidor(String id, String type, Double preco, int estado){
@@ -46,7 +45,7 @@ public class Catalogo{
 
     private ArrayList<servidor> servidores = new ArrayList<>();
     //private ArrayList<servidor> pedido = new ArrayList<>();
-    private Lock l = new ReentrantLock();
+    private ReentrantLock lockservers = new ReentrantLock();
 
     //0 se esta para ser reservado a pedido; 1 se esta a ser usado; 2 se esta para ser reservado em leilao
     public Catalogo(){
@@ -84,19 +83,19 @@ public class Catalogo{
         para ser reservado por pedido ou por leilao, respetivamente
     */ 
     public void setOcupied(int posicao, int novoEstado){
-        this.get(posicao).setEstado(novoEstado);
+        this.servidores.get(posicao).setEstado(novoEstado);
     }
 
     //metodo para indicar que um servidor passa a estar livre
     public void setFree(int posicao, int novoEstado){
-        this.get(posicao).setEstado(novoEstado);  
+        this.servidores.get(posicao).setEstado(novoEstado);  
     }
 
     public void lock(){
-        this.ls.lock();
+        this.lockservers.lock();
     }
 
     public void unlock(){
-        this.ls.unlock();
+        this.lockservers.unlock();
     }
 }
