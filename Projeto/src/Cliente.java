@@ -25,21 +25,21 @@ public class Cliente{
             System.out.println("2 -> servers para leiloar");
             System.out.println("3 -> logout");*/
 
-            boolean f = true;
-
-            while (f) {
-                String s = System.console().readLine();
+            //boolean f = true;
+            String s;
+            
+            while ((s = System.console().readLine()) != null) {
                 String[] p = s.split(" ");
                 switch(p[0]) {
                     case "regista":
                         int reg = c.registaCliente(p[1], p[2]);
-                        if (reg == 0) System.out.println("Registado");
+                        if (reg == 0) System.out.println("Registado com sucesso");
                         break;
                     case "autentica":
                         aut = c.autenticaCliente(p[1], p[2]);
                         if (aut == 0) {
                             System.out.println("Autenticado com sucesso");
-                            f = false;
+                            //f = false;
                         }
                         break;
                         
@@ -47,7 +47,7 @@ public class Cliente{
                         aut = c.reservarPorPedido(p[1], p[2]);
                         if (aut == 0) {
                             System.out.println("O seu pedido foi registado com sucesso");
-                            f = false;
+                            //f = false;
                         }
                         break;
 
@@ -56,7 +56,7 @@ public class Cliente{
                         aut = c.reservarPorLeilao(p[1], value, p[3]);
                         if (aut == 0) {
                             System.out.println("O seu pedido foi introduzido no leilão com sucesso");
-                            f = false;
+                            //f = false;
                         }
                         break;
                     
@@ -101,3 +101,4 @@ public class Cliente{
         return logged.Verifica_Pass(pass);
     }*/
 }
+

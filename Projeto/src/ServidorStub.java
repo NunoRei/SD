@@ -13,7 +13,7 @@ import java.util.Map;
  */
 
 public class ServidorStub implements interfaceGlobal{
-    //map que contem clientes autenticados no sistema
+    //map que contem clientes que fazem parte do sistema
     private Map<String, Cliente> clientes = new HashMap<>();
     //clientes conectados e que pretendem obtrer servidor em leilao
     private Map<String, Socket> clientesLeilao = new HashMap<>();
@@ -106,15 +106,11 @@ public class ServidorStub implements interfaceGlobal{
     //tipo: 0 ou 2
     //retorna 0 se fica com servidor pretendido e 1 caso contrario
     //se nao consegue reservar, vai para fila de espera até que chegue a sua vez de obter um servidor
-    public int reservarPorPedido(String email, String type){
-            //String resposta1 = "De momento não existem servidores desse tipo disponíveis";
-            //String resposta2 = "Foi-lhe atribuído o servidor desejado";
-            
+    public int reservarPorPedido(String email, String type){            
             this.cat.lock();
             //se nao existe servidor que cliente pretende, cliente vai para fila de espera de clientes na mesma situacao(reservar servidor a pedido)
             if(this.cat.existeServerPedido(type) < 0){
-                //introduzir cliente na fila de espera
-
+            	//this.clientesPedido.put(, );
                 return 0;
             }
 
@@ -213,3 +209,4 @@ public class ServidorStub implements interfaceGlobal{
     }
     */
 }
+

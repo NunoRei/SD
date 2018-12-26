@@ -146,3 +146,4 @@ public class ClienteStub implements interfaceGlobal{
         /*return this.password.equals(pass);*/
     }
 }
+
