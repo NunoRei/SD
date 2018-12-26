@@ -3,6 +3,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Map;
+import java.util.HashMap;
 
 public class Servidor extends Thread{
 	private final Socket x;
@@ -16,12 +17,14 @@ public class Servidor extends Thread{
     }
 
     public void run(){
-    	String info = null, nickname = null;
+    	String info = null, nickname = null, name = null;
     	int feedBack = 0, resautentica, resregista;
-    			
+    	PrintWriter out, outClienteConectado;
+    	BufferedReader in,inClienteConectado;
+    	
         try {
-            PrintWriter out = new PrintWriter(x.getOutputStream());
-            BufferedReader in = new BufferedReader(new InputStreamReader(x.getInputStream()));
+            out = new PrintWriter(x.getOutputStream());
+            in = new BufferedReader(new InputStreamReader(x.getInputStream()));
             
             //fase de negociacao do cliente com o servidor para se registar ou autenticar no sistema
             while(feedBack == 0){
@@ -64,8 +67,12 @@ public class Servidor extends Thread{
                 switch(p[0]){
                     case "servidor_Pedido":
                     		//p[1] é o type que o cliente indica
-                            int resservPedido = st.reservarPorPedido(nickname,p[1]);
-                            s = Integer.toString(resservPedido);
+                            int resservPedido = st.reservarPorPedido(nickname,p[1],x);
+                            if(resservPedido <= 0) s = "Foi inserido em fila de espera";
+                            else{
+                            	s = "O servidor pretendido foi-lhe atribuído na posição ";
+                            	s += Integer.toString(resservPedido) ;
+                            }
                         break;
 
                     //para aqui tem de indicar o nickname de utilizador, para ver se ja esta autenticado, o preço horário e indicar o tipo de servidor que quer reservar
@@ -77,9 +84,23 @@ public class Servidor extends Thread{
                         break;
                     
                     //caso em que o cliente escreve exit para sair so sistema
+                    //o servidor informa todos os clientes que passa a haver mais um servidor disponivel, dizendo a posicao do mesmo
                     case "exit":
                             int pretendeSairExit = st.retiraServidorExit(nickname);
-                            s = Integer.toString(pretendeSairExit);
+                            
+                            //informa toda a gente acerca de servidor disponível
+                            if(pretendeSairExit < 0) s = "Não conseguiu fazer exit no sistema";
+                            else
+                            	for(Map.Entry<String,Socket> e : this.clientesConectados.entrySet()){
+									name = e.getKey();
+									if(!name.equals(nickname)){
+										inClienteConectado = new BufferedReader(new InputStreamReader(e.getValue().getInputStream()));
+										outClienteConectado = new PrintWriter(e.getValue().getOutputStream());
+										outClienteConectado.println("O cliente " + nickname + "saiu do sistema e deixou livre o servidor " + pretendeSairExit);
+										outClienteConectado.flush();
+									}
+                            	}
+                            	s = "Conseguiu sair do sistema";
                         break;
 
                     default:
@@ -91,7 +112,7 @@ public class Servidor extends Thread{
                     	}
                     	else System.out.println("Comando invalido.");
                 }
-                //if (s.equals("3")) break;
+                
                 out.println(s);
                 out.flush();
                 
@@ -106,4 +127,5 @@ public class Servidor extends Thread{
         }
     }
 }
+
 
