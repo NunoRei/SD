@@ -15,10 +15,11 @@ import java.util.Map;
 public class ServidorStub implements interfaceGlobal{
     //map que contem clientes que fazem parte do sistema
     private Map<String, Cliente> clientes = new HashMap<>();
+    //clientes conectados e à espera, que pretendem obter servidor por pedido
+    private Map<String, Socket> clientesPedido = new HashMap<>();
+    //fila diferente da seguinte da anterior, pois aqui os clientes so entram quando estao a participar num leilao
     //clientes conectados e que pretendem obtrer servidor em leilao
     private Map<String, Socket> clientesLeilao = new HashMap<>();
-    //clientes conectados e à espera, que pretendem obter servidor por pedido 
-    private Map<String, Socket> clientesPedido = new HashMap<>();
     private Catalogo cat = new Catalogo();
     
     private String serverName;
@@ -104,19 +105,21 @@ public class ServidorStub implements interfaceGlobal{
     }
     
     //tipo: 0 ou 2
-    //retorna 0 se fica com servidor pretendido e 1 caso contrario
+    //retorna >=0 se fica com servidor pretendido e -1 caso vá para fila de espera
     //se nao consegue reservar, vai para fila de espera até que chegue a sua vez de obter um servidor
-    public int reservarPorPedido(String email, String type){            
-            this.cat.lock();
-            //se nao existe servidor que cliente pretende, cliente vai para fila de espera de clientes na mesma situacao(reservar servidor a pedido)
+    public int reservarPorPedido(String email, String type, Socket x){            
+            int resultado;
+    		//se nao existe servidor que cliente pretende, cliente vai para fila de espera de clientes na mesma situacao(reservar servidor a pedido)
             if(this.cat.existeServerPedido(type) < 0){
-            	//this.clientesPedido.put(, );
-                return 0;
+            	synchronized(this.clientesPedido){
+            		this.clientesPedido.put(email, x);
+            	}
+            	return -1;
             }
 
             else{
                 //resultado guarda a posicao em que está o servidor livre que vai ser atribuído ao cliente
-                int resultado = cat.existeServerPedido(type);
+                resultado = cat.existeServerPedido(type);
 
                 //indica no cliente a posicao no array do servidor que lhe foi atribuido
                 this.clientes.get(email).setServidor(resultado);
@@ -124,21 +127,25 @@ public class ServidorStub implements interfaceGlobal{
                 //nao sei se este metodo está bem, mas faz sentido avisar toda a gente que está conectada quando se atrui um servidor 
                 //atribuirServidor(email);
                 
-                //no array de servidores, mudar o estado para ocupado do servidor atribuido ao nosso cliente
-                this.cat.setOcupied(resultado,1);
+                this.cat.lock();
+	                //aqui mudar o estado do servidor atribuido ao nosso cliente para ocupado
+	                this.cat.setOcupied(resultado,1);
+                this.cat.unlock();
             }
-            this.cat.unlock();
-            return 0;
+            /*neste metodo reservarPorPedido só é preciso lock para quando se faz setOcupied, pois podem estar vários cliente a ler, mas quando 
+              alguem escreve, ninguem faz mais nada até a zona crítica ficar novamente "livre"
+            */
+            return resultado;
     }
 
     /*metodo chamado quando um cliente quer iniciar ou entrar num leilao por um servidor
-      retorna 0 se cliente consegue iniciar ou entrar num leilao 
+      retorna 0 se cliente consegue iniciar ou entrar num leilao
       retorna 1 se n houver servidores daquele tipo disponiveis para leilao*/
     public int reservarPorLeilao(String email, double preco, String type){
-        //String resposta = "Nao existem servidores desse tipo disponiveis para leilao";
+    	if(this.cat.existeServerLeilao(type) <= 0) return 1;
         
-        //caso haja "servidores para leiloar" livres
-        if(this.cat.existeServerLeilao(type) >= 0){
+    	//caso haja "servidores para leiloar" livres
+    	else{
             
         }
         
@@ -146,7 +153,7 @@ public class ServidorStub implements interfaceGlobal{
     }
 
     //cliente quer sair, usando um exit
-    // retorna 0, caso em que corre tudo bem quando cliente quer sair do sistema
+    // retorna a posicao do servidor que libertou
     public int retiraServidorExit(String email){
            //obter a posicao do array de servidores que corresponde ao servidor pertencente ao cliente com o nickname email
            int i = this.clientes.get(email).getServidor();
@@ -209,4 +216,3 @@ public class ServidorStub implements interfaceGlobal{
     }
     */
 }
-
