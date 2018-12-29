@@ -48,6 +48,12 @@ public class Servidor implements Runnable {
                         }
                         s = Integer.toString(resautentica);
                         break;
+                    case "pedir":
+                        s = st.reservarPorPedido(p[1]);
+                        break;
+                    case "libertar":
+                        s = st.libertaReserva(p[1]);
+                        break;
                     case "leilao": // So um teste de fazer broadcast de mensagens NAO E O FUNCIONAMENTO DO LEILAO
                         for (Socket sk : st.clientesativos.values()) {
                             if (sk != x) {

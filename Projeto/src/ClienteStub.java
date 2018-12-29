@@ -73,11 +73,10 @@ public class ClienteStub implements interfaceGlobal{
         }*/
         return Integer.parseInt(resposta);
     }
-    
-     public int reservarPorPedido(String email, String type){
-        String pedido = "servidor_Pedido ";
-        pedido+=email;
-        pedido+= " ";
+
+    @Override
+     public String reservarPorPedido(String type){
+        String pedido = "pedir ";
         pedido+=type;
 
         out.println(pedido);
@@ -92,7 +91,27 @@ public class ClienteStub implements interfaceGlobal{
         catch (IOException e) {
             e.printStackTrace();
         }*/
-        return Integer.parseInt(resposta);
+        return resposta;
+    }
+
+    @Override
+    public String libertaReserva(String id){
+        String pedido = "libertar ";
+        pedido+=id;
+
+        out.println(pedido);
+        out.flush();
+
+        while (received.isEmpty());
+        String resposta = received.remove();
+
+         /*try {
+            resposta = in.readLine();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }*/
+        return resposta;
     }
 
     public int reservarPorLeilao(String email, double quantia, String type){

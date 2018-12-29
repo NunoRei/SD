@@ -19,6 +19,7 @@ public class Cliente {
 
         int autenticado = 0;
         int exit = 0;
+        long inicialTime = 0, finalTime = 0;
 
         while (true) {
             String s = System.console().readLine();
@@ -47,9 +48,16 @@ public class Cliente {
             else {
                 switch (p[0]) {
                     case "pedir":
+<<<<<<< HEAD
+                        s = c.reservarPorPedido(p[1]);
+                        System.out.println(s);
+=======
                         /*int reg = c.registaCliente(p[1], p[2]);
                         if (reg == 0) System.out.println("Registado");*/
                         System.out.println("Registado");
+                        start = System.currentTimeMillis();
+
+>>>>>>> 78e2f6ae8ced2677b1edbab48a1456b023f8e3ee
                         break;
                     case "leilao":
                         /*int aut = c.autenticaCliente(p[1], p[2]);
@@ -60,11 +68,18 @@ public class Cliente {
                         System.out.println(resulleilao);
                         break;
                     case "libertar":
+<<<<<<< HEAD
+                        s = c.libertaReserva(p[1]);
+                        System.out.println(s);
+=======
                         /*int a = c.autenticaCliente(p[1], p[2]);
                         if (a == 0) {
                             System.out.println("Autenticado com sucesso");
                         }*/
-                        System.out.println("Registado");
+                        if (start == 0);
+                        else finalTime = System.currentTimeMillis()-inicialTime;
+                        System.out.println("Está com uma divida de " + finalTime);
+>>>>>>> 78e2f6ae8ced2677b1edbab48a1456b023f8e3ee
                         break;
                     case "divida":
                         System.out.println("Registado");

@@ -13,6 +13,7 @@ import java.util.Map;
  */
 
 public class ServidorStub implements interfaceGlobal{
+
     //map que contem clientes que fazem parte do sistema
     private Map<String, Cliente> clientes = new HashMap<>();
     /* Clientes que se encontram ativos no sistema */
@@ -23,16 +24,9 @@ public class ServidorStub implements interfaceGlobal{
     //clientes conectados e que pretendem obtrer servidor em leilao
     private Map<String, Socket> clientesLeilao = new HashMap<>();
     private Catalogo cat = new Catalogo();
-    
-    private String serverName;
-    private String serverType;
-    
-    private static ServerSocket SS;
+
     private String clienteAtual;
     private float pricePerHour;
-    
-    private BufferedReader in;
-    private PrintWriter out;
 
     private static class Cliente {
         private String email;
@@ -59,13 +53,7 @@ public class ServidorStub implements interfaceGlobal{
             return value_to_pay;
         }
     }
-    /*
-    //Construtor de um Servidor
-    public ServidorStub(String nome, String tipo, float price) {
-        this.serverName = nome;
-        this.serverType = tipo;
-        this.pricePerHour = price;
-    }*/
+
 
     @Override
     public int registaCliente(String email, String pass) {
@@ -86,46 +74,43 @@ public class ServidorStub implements interfaceGlobal{
             else return 1;
     }
 
-    //tipo: 0 ou 2
-    //retorna >=0 se fica com servidor pretendido e -1 caso vá para fila de espera
-    //se nao consegue reservar, vai para fila de espera até que chegue a sua vez de obter um servidor
-    public int reservarPorPedido(String email, String type, Socket x){            
-            int resultado;
-    		//se nao existe servidor que cliente pretende, cliente vai para fila de espera de clientes na mesma situacao(reservar servidor a pedido)
-            if(this.cat.existeServer(type) < 0){
-            		//await do cliente
-            }
+    public String reservarPorPedido(String type){
+        String resultado = null;
+        try {
+            resultado = cat.reservaPedido(type);
+        }
+        catch (Exception e) {
 
-            else{
-                //indica no cliente a posicao no array do servidor que lhe foi atribuido
-                this.clientes.get(email).setServidor(resultado);
-                
-                //nao sei se este metodo está bem, mas faz sentido avisar toda a gente que está conectada quando se atrui um servidor 
-                //atribuirServidor(email);
-                
-                this.cat.lock();
-	            //vai passar a haver menos uma quantidade daquele tipo de servidor    
-		    this.cat.decrementQuantidade(type);
-                this.cat.unlock();
-            }
-            
-            return resultado;
+        }
+        return resultado;
+    }
+
+    public String libertaReserva(String id){
+        String resultado = null;
+        try {
+            cat.libertaReserva(id);
+            resultado = "Libertou servidor";
+        }
+        catch (Exception e) {
+
+        }
+        return resultado;
     }
 
     /*metodo chamado quando um cliente quer iniciar ou entrar num leilao por um servidor
       retorna 0 se cliente consegue iniciar ou entrar num leilao
       retorna 1 se n houver servidores daquele tipo disponiveis para leilao*/
-    public int reservarPorLeilao(String email, double preco, String type){
+    /*public int reservarPorLeilao(String email, double preco, String type){
     	if(this.cat.existeServer(type) < 0){
 		//o cliente vai a leilao para tentar ficar com o servidor
 	}
        
         return 0;
-    }
+    }*/
 
     //cliente quer sair, usando um exit
     // retorna a posicao do servidor que libertou
-    public int retiraServidorExit(String email){
+    public int retiraServidorExit(String email) {
            /*
 	   quando o cliente sai do sistema, avisa os outros que pretendem obter um servidor do tipo que ele tem, ou seja,
 	   faz um notify, ou para os que reservaram a pedido, para aqueles que estão em leilão 	
