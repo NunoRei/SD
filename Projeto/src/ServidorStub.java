@@ -39,15 +39,12 @@ public class ServidorStub implements interfaceGlobal{
         private String password;
         private float value_to_pay;
         private int conectado;
-        private int temServidor;
 
         public Cliente(String email,String pass){
             this.email = email;
             this.password = pass;
             this.value_to_pay = 0;
             //this.conectado = 0;
-            //se lhe foi atribuido um servidor, tem indice >= 0, senão tem índice -1
-            this.temServidor = -1;
         }
 
         public String getPassword() {
@@ -60,22 +57,6 @@ public class ServidorStub implements interfaceGlobal{
 
         public float getValue_to_pay() {
             return value_to_pay;
-        }
-
-        public int getEstado(){
-            return this.conectado;
-        }
-
-        public void setEstado(int estado){
-            this.conectado = estado;
-        }
-
-        public int getServidor(){
-            return this.temServidor;
-        }
-
-        public void setServidor(int i){
-            this.temServidor = i;
         }
     }
     /*
@@ -111,17 +92,11 @@ public class ServidorStub implements interfaceGlobal{
     public int reservarPorPedido(String email, String type, Socket x){            
             int resultado;
     		//se nao existe servidor que cliente pretende, cliente vai para fila de espera de clientes na mesma situacao(reservar servidor a pedido)
-            if(this.cat.existeServerPedido(type) < 0){
-            	synchronized(this.clientesPedido){
-            		this.clientesPedido.put(email, x);
-            	}
-            	return -1;
+            if(this.cat.existeServer(type) < 0){
+            		//await do cliente
             }
 
             else{
-                //resultado guarda a posicao em que está o servidor livre que vai ser atribuído ao cliente
-                resultado = cat.existeServerPedido(type);
-
                 //indica no cliente a posicao no array do servidor que lhe foi atribuido
                 this.clientes.get(email).setServidor(resultado);
                 
@@ -129,13 +104,11 @@ public class ServidorStub implements interfaceGlobal{
                 //atribuirServidor(email);
                 
                 this.cat.lock();
-	                //aqui mudar o estado do servidor atribuido ao nosso cliente para ocupado
-	                this.cat.setOcupied(resultado,1);
+	            //vai passar a haver menos uma quantidade daquele tipo de servidor    
+		    this.cat.decrementQuantidade(type);
                 this.cat.unlock();
             }
-            /*neste metodo reservarPorPedido só é preciso lock para quando se faz setOcupied, pois podem estar vários cliente a ler, mas quando 
-              alguem escreve, ninguem faz mais nada até a zona crítica ficar novamente "livre"
-            */
+            
             return resultado;
     }
 
@@ -143,29 +116,21 @@ public class ServidorStub implements interfaceGlobal{
       retorna 0 se cliente consegue iniciar ou entrar num leilao
       retorna 1 se n houver servidores daquele tipo disponiveis para leilao*/
     public int reservarPorLeilao(String email, double preco, String type){
-    	if(this.cat.existeServerLeilao(type) <= 0) return 1;
-        
-    	//caso haja "servidores para leiloar" livres
-    	else{
-            
-        }
-        
+    	if(this.cat.existeServer(type) < 0){
+		//o cliente vai a leilao para tentar ficar com o servidor
+	}
+       
         return 0;
     }
 
     //cliente quer sair, usando um exit
     // retorna a posicao do servidor que libertou
     public int retiraServidorExit(String email){
-           //obter a posicao do array de servidores que corresponde ao servidor pertencente ao cliente com o nickname email
-           int i = this.clientes.get(email).getServidor();
+           /*
+	   quando o cliente sai do sistema, avisa os outros que pretendem obter um servidor do tipo que ele tem, ou seja,
+	   faz um notify, ou para os que reservaram a pedido, para aqueles que estão em leilão 	
+	    */
            
-           //como o cliente vai "devolver" o servidor, fica sem nenhum servidor do array de servidores, ou seja, o atributo temServidor(no cliente) passa a ser -1
-           this.clientes.get(email).setServidor(-1);
-            
-           //colocar servidor novamente disponível(penso que basta por o seu indice valido)
-           //falta saber se o servidor que passa a estar disponivel fica com o tipo 0 ou 2
-           //this.cat.get(i).setEstado(...);
-
            return 0;
     }
 
