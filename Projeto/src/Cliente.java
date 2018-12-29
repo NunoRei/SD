@@ -19,8 +19,7 @@ public class Cliente {
 
         int autenticado = 0;
         int exit = 0;
-        long inicialTime = 0, finalTime = 0;
-
+        
         while (true) {
             String s = System.console().readLine();
             String[] p = s.split(" ");
@@ -53,7 +52,6 @@ public class Cliente {
                         /*int reg = c.registaCliente(p[1], p[2]);
                         if (reg == 0) System.out.println("Registado");*/
                         System.out.println("Registado");
-                        start = System.currentTimeMillis();
                         break;
                     case "leilao":
                         /*int aut = c.autenticaCliente(p[1], p[2]);
@@ -70,8 +68,7 @@ public class Cliente {
                         if (a == 0) {
                             System.out.println("Autenticado com sucesso");
                         }*/
-                        if (start == 0);
-                        else finalTime = System.currentTimeMillis()-inicialTime;
+                        
                         System.out.println("Está com uma divida de " + finalTime);
                         break;
                     case "divida":
