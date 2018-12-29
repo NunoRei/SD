@@ -3,15 +3,19 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  *
- * @author João Marques, Nuno Rei e Jaime Leite
+ * @author João Marques, Nuno Rei, Jaime Leite e Hugo Nogueira
  */
 public class ClienteStub implements interfaceGlobal{
     private final Socket x;
     private final PrintWriter out;
     private final BufferedReader in;
+    private Queue<String> received;
+
     /*
     private String email;
     private String password;
@@ -21,8 +25,8 @@ public class ClienteStub implements interfaceGlobal{
         x = new Socket("localhost",12345);
         out = new PrintWriter(x.getOutputStream());
         in = new BufferedReader(new InputStreamReader(x.getInputStream()));
-            
-        Thread leitorCliente = new Thread(new Reader(x,in,out));
+        received = new LinkedList<>();
+        Thread leitorCliente = new Thread(new Reader(x,in,out,received));
         leitorCliente.start();
     }
 
@@ -37,13 +41,14 @@ public class ClienteStub implements interfaceGlobal{
         out.println(pedido);
         out.flush();
 
-        String resposta = null;
-        try {
+        while (received.isEmpty());
+        String resposta = received.remove();
+        /*try {
             resposta = in.readLine();
         }
         catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
         return Integer.parseInt(resposta);
     }
 
@@ -57,13 +62,15 @@ public class ClienteStub implements interfaceGlobal{
         out.println(pedido);
         out.flush();
 
-        String resposta = null;
-        try {
+        while (received.isEmpty());
+        String resposta = received.remove();
+
+        /*try {
             resposta = in.readLine();
         }
         catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
         return Integer.parseInt(resposta);
     }
     
@@ -76,13 +83,15 @@ public class ClienteStub implements interfaceGlobal{
         out.println(pedido);
         out.flush();
 
-        String resposta = null;
-        try {
+         while (received.isEmpty());
+         String resposta = received.remove();
+
+         /*try {
             resposta = in.readLine();
         }
         catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
         return Integer.parseInt(resposta);
     }
 
@@ -97,13 +106,15 @@ public class ClienteStub implements interfaceGlobal{
         out.println(pedido);
         out.flush();
 
-        String resposta = null;
-        try {
+        while (received.isEmpty());
+        String resposta = received.remove();
+
+        /*try {
             resposta = in.readLine();
         }
         catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
         return Integer.parseInt(resposta);
     }
 
@@ -114,13 +125,14 @@ public class ClienteStub implements interfaceGlobal{
         out.println(pedido);
         out.flush();
 
-        String resposta = null;
-        try {
+        while (received.isEmpty());
+        String resposta = received.remove();
+        /*try {
             resposta = in.readLine();
         }
         catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
         return Integer.parseInt(resposta);
     }
 
@@ -130,14 +142,41 @@ public class ClienteStub implements interfaceGlobal{
         out.println(pedido);
         out.flush();
 
-        String resposta = null;
-        try {
+        while (received.isEmpty());
+        String resposta = received.remove();
+
+        /*try {
             resposta = in.readLine();
         }
         catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
         return Integer.parseInt(resposta);
+    }
+
+    //@Override
+    public String leilao () {
+        String pedido = "leilao ";
+
+        out.println(pedido);
+        out.flush();
+
+        while (received.isEmpty());
+        String resposta = received.remove();
+        /*try {
+            resposta = in.readLine();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }*/
+        return resposta;
+    }
+
+    public void exit () {
+        String pedido = "exit";
+
+        out.println(pedido);
+        out.flush();
     }
     
     //Verifica palavra passe

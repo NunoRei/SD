@@ -9,12 +9,14 @@ import java.util.Map;
 
 /**
  *
- * @author João Marques, Nuno Rei e Jaime Leite
+ * @author João Marques, Nuno Rei, Jaime Leite e Hugo Nogueira
  */
 
 public class ServidorStub implements interfaceGlobal{
     //map que contem clientes que fazem parte do sistema
     private Map<String, Cliente> clientes = new HashMap<>();
+    /* Clientes que se encontram ativos no sistema */
+    public Map<String, Socket> clientesativos = new HashMap<>();
     //clientes conectados e à espera, que pretendem obter servidor por pedido
     private Map<String, Socket> clientesPedido = new HashMap<>();
     //fila diferente da seguinte da anterior, pois aqui os clientes so entram quando estao a participar num leilao
@@ -99,11 +101,10 @@ public class ServidorStub implements interfaceGlobal{
     public int autenticaCliente(String email, String pass) {
         Cliente c;
         if ((c = clientes.get(email)) == null) return 1;
-        else if (c.getPassword().equals(pass)) return 0;
+        else if ((c.getPassword().equals(pass)) && !clientesativos.containsKey(email)) return 0;
             else return 1;
-        //this.clientes.get(c).setConectado(1);
     }
-    
+
     //tipo: 0 ou 2
     //retorna >=0 se fica com servidor pretendido e -1 caso vá para fila de espera
     //se nao consegue reservar, vai para fila de espera até que chegue a sua vez de obter um servidor

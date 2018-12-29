@@ -1,5 +1,5 @@
 /**
- * @author João Marques, Nuno Rei e Jaime Leite
+ * @author João Marques, Nuno Rei, Jaime Leite e Hugo Nogueira
  */
 
 public interface interfaceGlobal {

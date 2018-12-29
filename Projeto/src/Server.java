@@ -1,5 +1,3 @@
-package trabalhoSD;
-
 import java.util.HashMap;
 import java.util.Map;
 //import Cliente.*;
@@ -16,15 +14,5 @@ import java.net.Socket;
  */
 
 public class Server{
-    public static void main(String[] args) throws Exception{
-    	Map<String, Socket> clientesConectados = new HashMap<>();
-    	
-    	ServerSocket ss = new ServerSocket(12345);
-        ServidorStub st = new ServidorStub();
-        while (true){
-            Socket x;
-            x = ss.accept();
-            new Servidor(x,st,clientesConectados).start();
-        }
-    }
+
 }

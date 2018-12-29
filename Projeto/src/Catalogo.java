@@ -4,7 +4,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  *
- * @author João Marques, Nuno Rei e Jaime Leite
+ * @author João Marques, Nuno Rei, Jaime Leite e Hugo Nogueira
  */
 
 public class Catalogo{
