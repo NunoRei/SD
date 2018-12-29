@@ -67,7 +67,7 @@ public class Cliente {
                         if (a == 0) {
                             System.out.println("Autenticado com sucesso");
                         }*/
-                        if start = 0;
+                        if (start == 0);
                         else finalTime = System.currentTimeMillis()-inicialTime;
                         System.out.println("Está com uma divida de " + finalTime);
                         break;
