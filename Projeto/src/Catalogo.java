@@ -50,7 +50,10 @@ public class Catalogo {
 		pedido.put("large",new Servidor("t3","large",1.00,2));
 		leilao.put("micro",new Servidor("t4","micro",0.99,2));
 	}
-
+	
+	public double getPrice(String id) {
+		return this.pedido.get(id).getPreco();
+	}
 	    /*//retorna > 0 se há servidores daquele tipo livres e 0 caso contrário
 	    public int existeServer(String type){
 	        int i;
@@ -71,6 +74,7 @@ public class Catalogo {
 			while (s.quantidade == 0) {
 				s.notTaken.await();
 			}
+			System.out.println("Obtive o servidor");
 			s.quantidade -= 1;
 			return s.type;
 		}
@@ -79,7 +83,7 @@ public class Catalogo {
 		}
 	}
 
-	public void libertaReserva(String id) {
+	public void libertaReserva(String id){
 		l.lock();
 		try {
 			Servidor s = this.pedido.get(id);
@@ -90,5 +94,4 @@ public class Catalogo {
 			l.unlock();
 		}
 	}
-
 }

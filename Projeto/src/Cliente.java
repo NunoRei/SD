@@ -23,7 +23,7 @@ public class Cliente {
         while (true) {
             String s = System.console().readLine();
             String[] p = s.split(" ");
-            if (autenticado == 0) {
+            if (autenticado == 0){
                 switch (p[0]) {
                     case "regista":
                         int reg = c.registaCliente(p[1], p[2]);
@@ -39,20 +39,22 @@ public class Cliente {
                     case "exit":
                         exit = 1;
                         break;
-                    default:
-                        System.out.println("Comando invalido.");
-                        break;
+                    //default:
+                      //  System.out.println("Comando invalido.");
+                        //break;
                 }
             }
             else {
                 switch (p[0]) {
                     case "pedir":
+                        System.out.println("estou a espera de servidor");
                         s = c.reservarPorPedido(p[1]);
                         System.out.println(s);
                         /*int reg = c.registaCliente(p[1], p[2]);
                         if (reg == 0) System.out.println("Registado");*/
                         /*System.out.println("Registado");
                         inicialTime = System.currentTimeMillis();*/
+                        //System.out.println("Registado");
                         break;
                     case "leilao":
                         /*int aut = c.autenticaCliente(p[1], p[2]);
@@ -73,9 +75,11 @@ public class Cliente {
                         else finalTime = System.currentTimeMillis()-inicialTime;
                         System.out.println("Está com uma divida de " + finalTime);*/
                         //System.out.println("Está com uma divida de " + finalTime);
+                        //System.out.println(s);
                         break;
                     case "divida":
-                        System.out.println("Registado");
+                        s = c.obterDivida();
+                        System.out.println(s);
                         break;
                     case "exit":
                         exit = 1;
@@ -92,6 +96,3 @@ public class Cliente {
         System.out.println("Exiting...");
     }
 }
-
-
-

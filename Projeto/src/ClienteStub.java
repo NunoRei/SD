@@ -103,7 +103,7 @@ public class ClienteStub implements interfaceGlobal{
             resposta = takeMessage();
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
+        }       
          /*try {
             resposta = in.readLine();
         }
@@ -128,6 +128,24 @@ public class ClienteStub implements interfaceGlobal{
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+         /*try {
+            resposta = in.readLine();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }*/
+        return resposta;
+    }
+    
+    public String obterDivida(){
+        String pedido = "divida ";
+
+        out.println(pedido);
+        out.flush();
+
+        while (received.isEmpty());
+        String resposta = received.remove();
 
          /*try {
             resposta = in.readLine();
@@ -256,4 +274,6 @@ public class ClienteStub implements interfaceGlobal{
         }
     }
 }
+
+
 
