@@ -71,11 +71,14 @@ public class Catalogo {
 			}
 			ocupacaopedido+=1;*/
 			Servidor s = this.pedido.get(type);
-			while (s.quantidade == 0) {
-				s.notTaken.await();
+			if (s != null) {
+				while (s.quantidade == 0) {
+					s.notTaken.await();
+				}
+				s.quantidade -= 1;
+				return s.type;
 			}
-			s.quantidade -= 1;
-			return s.type;
+			return "";
 		}
 		finally {
 			l.unlock();

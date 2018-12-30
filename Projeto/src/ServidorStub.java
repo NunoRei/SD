@@ -31,11 +31,13 @@ public class ServidorStub implements interfaceGlobal{
     private static class Cliente {
         private String email;
         private String password;
+        private String idservidor; // string vazia se nao tiver nenhum
         private double divida;
 
-        public Cliente(String email,String pass){
+        public Cliente(String email,String pass) {
             this.email = email;
             this.password = pass;
+            this.idservidor = "";
             this.divida = 0;
         }
 
@@ -53,6 +55,14 @@ public class ServidorStub implements interfaceGlobal{
         
         public void setDivida(double divida){
             this.divida = divida;
+        }
+
+        public void setIdservidor(String id) {
+            this.idservidor = id;
+        }
+
+        public String getIdservidor() {
+            return this.idservidor;
         }
     }
 
@@ -76,26 +86,34 @@ public class ServidorStub implements interfaceGlobal{
             else return 1;
     }
 
-    public String reservarPorPedido(String type){
+    @Override
+    public String reservarPorPedido(String email, String type){
         String resultado = null;
         try {
             resultado = cat.reservaPedido(type);
+            if (!resultado.equals(""))
+                clientes.get(email).setIdservidor(resultado);
+            else resultado = "Servidor inexistente";
         }
         catch (Exception e) {
-
+            e.printStackTrace();
         }
         return resultado;
     }
 
-    public String libertaReserva(String id){
+    @Override
+    public String libertaReserva(String email, String id){
         String resultado = "";
         try {
-            cat.libertaReserva(id);
-            double precoServer = cat.getPrice(id);
-            resultado += precoServer;
+            if (clientes.get(email).getIdservidor().equals(id)) {
+                cat.libertaReserva(id);
+                clientes.get(email).setIdservidor("");
+                double precoServer = cat.getPrice(id);
+                resultado += precoServer;
+            }
         }
         catch (Exception e) {
-
+            e.printStackTrace();
         }
         return resultado;
     }

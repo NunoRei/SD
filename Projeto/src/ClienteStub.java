@@ -91,7 +91,7 @@ public class ClienteStub implements interfaceGlobal{
     }
 
     @Override
-     public String reservarPorPedido(String type){
+     public String reservarPorPedido(String email, String type){
         String pedido = "pedir ";
         pedido+=type;
 
@@ -114,7 +114,7 @@ public class ClienteStub implements interfaceGlobal{
     }
 
     @Override
-    public String libertaReserva(String id){
+    public String libertaReserva(String email, String id){
         String pedido = "libertar ";
         pedido+=id;
 
