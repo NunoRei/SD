@@ -17,13 +17,13 @@ public class Cliente {
 
         ClienteStub c = new ClienteStub();
 
-        int autenticado = 0;
+        String email = null;
         int exit = 0;
         
         while (true) {
             String s = System.console().readLine();
             String[] p = s.split(" ");
-            if (autenticado == 0){
+            if (email == null){
                 switch (p[0]) {
                     case "regista":
                         int reg = c.registaCliente(p[1], p[2]);
@@ -32,7 +32,7 @@ public class Cliente {
                     case "autentica":
                         int aut = c.autenticaCliente(p[1], p[2]);
                         if (aut == 0) {
-                            autenticado = 1;
+                            email = p[1];
                             System.out.println("Autenticado com sucesso");
                         }
                         break;
@@ -47,8 +47,7 @@ public class Cliente {
             else {
                 switch (p[0]) {
                     case "pedir":
-                        System.out.println("estou a espera de servidor");
-                        s = c.reservarPorPedido(p[1]);
+                        s = c.reservarPorPedido(email,p[1]);
                         System.out.println(s);
                         /*int reg = c.registaCliente(p[1], p[2]);
                         if (reg == 0) System.out.println("Registado");*/
@@ -65,7 +64,7 @@ public class Cliente {
                         System.out.println(resulleilao);
                         break;
                     case "libertar":
-                        s = c.libertaReserva(p[1]);
+                        s = c.libertaReserva(email, p[1]);
                         System.out.println(s);
                         /*int a = c.autenticaCliente(p[1], p[2]);
                         if (a == 0) {

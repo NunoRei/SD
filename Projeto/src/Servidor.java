@@ -35,7 +35,8 @@ public class Servidor implements Runnable {
             BufferedReader in = new BufferedReader(new InputStreamReader(x.getInputStream()));
             String s;
 
-            while ((s = in.readLine()) != null) {
+            while (true) {
+                s = in.readLine();
                 String[] p = s.split(" ");
                 switch(p[0]) {
                     case "regista":
@@ -51,19 +52,20 @@ public class Servidor implements Runnable {
                         s = Integer.toString(resautentica);
                         break;
                     case "pedir":
-                        s = st.reservarPorPedido(p[1]);
+                        s = st.reservarPorPedido(email, p[1]);
                         inicialTime = System.currentTimeMillis();
                         break;
                     
                     case "libertar":
-                        s = st.libertaReserva(p[1]);
+                        s = st.libertaReserva(email, p[1]);
                         
                         if(inicialTime == 0);
-                        else finalTime = (System.currentTimeMillis()-inicialTime) / 1000;
-                        st.setValorDivida(email,(finalTime * Double.parseDouble(s)));
-                        
-                        s = "Libertou o servidor";
-                        
+                        else if (!s.equals("")) {
+                            finalTime = (System.currentTimeMillis() - inicialTime) / 1000;
+                            st.setValorDivida(email, (finalTime * Double.parseDouble(s)));
+                            s = "Libertou o servidor";
+                        }
+                        else s = "Identificador de Servidor invalido";
                         break;
                     
                     case "divida":
