@@ -52,8 +52,8 @@ public class Cliente {
                         System.out.println(s);
                         /*int reg = c.registaCliente(p[1], p[2]);
                         if (reg == 0) System.out.println("Registado");*/
-                        System.out.println("Registado");
-                        start = System.currentTimeMillis();
+                        /*System.out.println("Registado");
+                        inicialTime = System.currentTimeMillis();*/
                         break;
                     case "leilao":
                         /*int aut = c.autenticaCliente(p[1], p[2]);
@@ -70,9 +70,9 @@ public class Cliente {
                         if (a == 0) {
                             System.out.println("Autenticado com sucesso");
                         }*/
-                        if (start == 0);
+                        /*if (inicialTime == 0);
                         else finalTime = System.currentTimeMillis()-inicialTime;
-                        System.out.println("Está com uma divida de " + finalTime);
+                        System.out.println("Está com uma divida de " + finalTime);*/
                         break;
                     case "divida":
                         System.out.println("Registado");
