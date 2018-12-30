@@ -19,8 +19,7 @@ public class Cliente {
 
         int autenticado = 0;
         int exit = 0;
-        long inicialTime = 0, finalTime = 0;
-
+        
         while (true) {
             String s = System.console().readLine();
             String[] p = s.split(" ");
@@ -73,6 +72,7 @@ public class Cliente {
                         /*if (inicialTime == 0);
                         else finalTime = System.currentTimeMillis()-inicialTime;
                         System.out.println("Está com uma divida de " + finalTime);*/
+                        //System.out.println("Está com uma divida de " + finalTime);
                         break;
                     case "divida":
                         System.out.println("Registado");
