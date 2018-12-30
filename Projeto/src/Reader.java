@@ -48,4 +48,3 @@ public class Reader implements Runnable{
         }
     }
 }
-

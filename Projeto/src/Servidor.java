@@ -75,14 +75,8 @@ public class Servidor implements Runnable {
                         
                         break;
                     case "leilao": // So um teste de fazer broadcast de mensagens NAO E O FUNCIONAMENTO DO LEILAO
-                        for (Socket sk : st.clientesativos.values()) {
-                            if (sk != x) {
-                                PrintWriter skout = new PrintWriter(sk.getOutputStream());
-                                skout.println("all: Leilao iniciado");
-                                skout.flush();
-                            }
-                        }
-                        s = "licitacao feita";
+                        s = st.leilao(email, String.valueOf(p[1]),p[2]);
+                        //s = "licitacao feita";
                         break;
                     case "exit":
                         s = "exit";

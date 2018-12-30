@@ -84,6 +84,28 @@ public class Catalogo {
 			l.unlock();
 		}
 	}
+	
+	public String reservaLeilao(String type) throws InterruptedException {
+		l.lock();
+		try {
+			/*while(ocupacaopedido == MAX) {
+				pavaliable.await();
+			}
+			ocupacaopedido+=1;*/
+			Servidor s = this.leilao.get(type);
+			if (s != null){
+				if (s.quantidade == 0){
+					return "Indisponível";
+				}
+				s.quantidade -= 1;
+				return s.type;
+			}
+			return "Indisponível";
+		}
+		finally {
+			l.unlock();
+		}
+	}
 
 	public void libertaReserva(String id){
 		l.lock();

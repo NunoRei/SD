@@ -219,7 +219,7 @@ public class ClienteStub implements interfaceGlobal{
     }
 
     //@Override
-    public String leilao () {
+    public String leilao (){
         String pedido = "leilao ";
 
         out.println(pedido);
