@@ -274,6 +274,3 @@ public class ClienteStub implements interfaceGlobal{
         }
     }
 }
-
-
-
