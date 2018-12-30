@@ -32,13 +32,13 @@ public class ServidorStub implements interfaceGlobal{
         private String email;
         private String password;
         private float value_to_pay;
-        private int conectado;
+        private double divida;
 
         public Cliente(String email,String pass){
             this.email = email;
             this.password = pass;
             this.value_to_pay = 0;
-            //this.conectado = 0;
+            this.divida = 0;
         }
 
         public String getPassword() {
@@ -51,6 +51,14 @@ public class ServidorStub implements interfaceGlobal{
 
         public float getValue_to_pay() {
             return value_to_pay;
+        }
+        
+        public double getDivida(){
+            return this.divida;
+        }
+        
+        public void setDivida(double divida){
+            this.divida = divida;
         }
     }
 
@@ -78,6 +86,7 @@ public class ServidorStub implements interfaceGlobal{
         String resultado = null;
         try {
             resultado = cat.reservaPedido(type);
+            System.out.println("o cliente obteve o servidor");
         }
         catch (Exception e) {
 
@@ -86,24 +95,34 @@ public class ServidorStub implements interfaceGlobal{
     }
 
     public String libertaReserva(String id){
-        String resultado = null;
+        String resultado = "";
         try {
             cat.libertaReserva(id);
-            resultado = "Libertou servidor";
+            double precoServer = cat.getPrice(id);
+            resultado += precoServer;
+            //System.out.println(precoServer);
         }
         catch (Exception e) {
 
         }
         return resultado;
     }
-
+    
+    public void setValorDivida(String email, double divida){
+        this.clientes.get(email).setDivida(divida);
+    }
+    
+    public double getValorDivida(String email){
+        return this.clientes.get(email).getDivida();
+    }
+    
     /*metodo chamado quando um cliente quer iniciar ou entrar num leilao por um servidor
       retorna 0 se cliente consegue iniciar ou entrar num leilao
       retorna 1 se n houver servidores daquele tipo disponiveis para leilao*/
     /*public int reservarPorLeilao(String email, double preco, String type){
-    	if(this.cat.existeServer(type) < 0){
-		//o cliente vai a leilao para tentar ficar com o servidor
-	}
+        if(this.cat.existeServer(type) < 0){
+        //o cliente vai a leilao para tentar ficar com o servidor
+    }
        
         return 0;
     }*/
@@ -112,9 +131,9 @@ public class ServidorStub implements interfaceGlobal{
     // retorna a posicao do servidor que libertou
     public int retiraServidorExit(String email) {
            /*
-	   quando o cliente sai do sistema, avisa os outros que pretendem obter um servidor do tipo que ele tem, ou seja,
-	   faz um notify, ou para os que reservaram a pedido, para aqueles que estão em leilão 	
-	    */
+       quando o cliente sai do sistema, avisa os outros que pretendem obter um servidor do tipo que ele tem, ou seja,
+       faz um notify, ou para os que reservaram a pedido, para aqueles que estão em leilão  
+        */
            
            return 0;
     }

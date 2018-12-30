@@ -82,8 +82,9 @@ public class ClienteStub implements interfaceGlobal{
         out.println(pedido);
         out.flush();
 
-         while (received.isEmpty());
-         String resposta = received.remove();
+        while (received.isEmpty());
+
+        String resposta = received.remove();         
 
          /*try {
             resposta = in.readLine();
@@ -98,6 +99,24 @@ public class ClienteStub implements interfaceGlobal{
     public String libertaReserva(String id){
         String pedido = "libertar ";
         pedido+=id;
+
+        out.println(pedido);
+        out.flush();
+
+        while (received.isEmpty());
+        String resposta = received.remove();
+
+         /*try {
+            resposta = in.readLine();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }*/
+        return resposta;
+    }
+    
+    public String obterDivida(){
+        String pedido = "divida ";
 
         out.println(pedido);
         out.flush();
@@ -204,4 +223,3 @@ public class ClienteStub implements interfaceGlobal{
         /*return this.password.equals(pass);*/
     }
 }
-
