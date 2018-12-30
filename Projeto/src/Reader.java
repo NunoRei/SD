@@ -11,30 +11,31 @@ import java.util.Queue;
 
 
 public class Reader implements Runnable{
+
+    ClienteStub cs;
     Socket socket;
     BufferedReader in;
     PrintWriter out;
-    Queue<String> received;
 
-    public Reader(Socket socket, BufferedReader in, PrintWriter out, Queue<String> q){
+    public Reader(Socket socket, BufferedReader in, PrintWriter out, ClienteStub c){
         this.socket = socket;
         this.in = in;
         this.out = out;
-        this.received = q;
+        this.cs = c;
     }
 
     //so executa n leitores de cada vez, em simultâneo.
     public void run(){
-        String ans;
         try{
-            while((ans = this.in.readLine()) != null) {
+            while(true) {
+                String ans = in.readLine();
                 String[] p = ans.split(" ");
                 if (p[0].equals("all:")) {
                     System.out.println(ans);
                 }
                 else if (ans.equals("exit")) break;
                 else {
-                    received.add(ans);
+                    cs.addMessage(ans);
                 }
             }
             in.close();
