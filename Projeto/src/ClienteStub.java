@@ -144,9 +144,12 @@ public class ClienteStub implements interfaceGlobal{
         out.println(pedido);
         out.flush();
 
-        while (received.isEmpty());
-        String resposta = received.remove();
-
+        String resposta = null;
+        try {
+            resposta = takeMessage();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
          /*try {
             resposta = in.readLine();
         }

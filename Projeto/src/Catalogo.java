@@ -74,7 +74,6 @@ public class Catalogo {
 			while (s.quantidade == 0) {
 				s.notTaken.await();
 			}
-			System.out.println("Obtive o servidor");
 			s.quantidade -= 1;
 			return s.type;
 		}

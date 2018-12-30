@@ -31,13 +31,11 @@ public class ServidorStub implements interfaceGlobal{
     private static class Cliente {
         private String email;
         private String password;
-        private float value_to_pay;
         private double divida;
 
         public Cliente(String email,String pass){
             this.email = email;
             this.password = pass;
-            this.value_to_pay = 0;
             this.divida = 0;
         }
 
@@ -49,10 +47,6 @@ public class ServidorStub implements interfaceGlobal{
             return email;
         }
 
-        public float getValue_to_pay() {
-            return value_to_pay;
-        }
-        
         public double getDivida(){
             return this.divida;
         }
@@ -86,7 +80,6 @@ public class ServidorStub implements interfaceGlobal{
         String resultado = null;
         try {
             resultado = cat.reservaPedido(type);
-            System.out.println("o cliente obteve o servidor");
         }
         catch (Exception e) {
 
@@ -100,7 +93,6 @@ public class ServidorStub implements interfaceGlobal{
             cat.libertaReserva(id);
             double precoServer = cat.getPrice(id);
             resultado += precoServer;
-            //System.out.println(precoServer);
         }
         catch (Exception e) {
 

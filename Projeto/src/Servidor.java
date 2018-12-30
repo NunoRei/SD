@@ -35,7 +35,8 @@ public class Servidor implements Runnable {
             BufferedReader in = new BufferedReader(new InputStreamReader(x.getInputStream()));
             String s;
 
-            while ((s = in.readLine()) != null) {
+            while (true) {
+                s = in.readLine();
                 String[] p = s.split(" ");
                 switch(p[0]) {
                     case "regista":
