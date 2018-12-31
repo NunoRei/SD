@@ -110,9 +110,16 @@ public class Catalogo {
 	public void libertaReserva(String id){
 		l.lock();
 		try {
-			Servidor s = this.pedido.get(id);
-			s.quantidade += 1;
-			s.notTaken.signalAll();
+			if(!id.equals("t4")){
+				Servidor s = this.pedido.get(id);
+				s.quantidade += 1;
+				s.notTaken.signalAll();
+			}
+			
+			else {
+				Servidor s = this.leilao.get(id);
+				s.quantidade += 1;
+			}
 		}
 		finally {
 			l.unlock();
