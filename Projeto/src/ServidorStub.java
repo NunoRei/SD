@@ -127,7 +127,8 @@ public class ServidorStub implements interfaceGlobal{
     public double getValorDivida(String email){
         return this.clientes.get(email).getDivida();
     }
-    
+
+    /*
     public String leilao(String email, String preco, String type){
         String resultado = null;
         try {
@@ -143,7 +144,7 @@ public class ServidorStub implements interfaceGlobal{
             	if(dsdas){
             		//put com o nome do cliente e valor que ele oferece
             		//this.clientesLeilao.put(,);
-	            	for (/*percorrer os clientes ativos*/)){
+	            	for (percorrer os clientes ativos)){
 	                    //aqui verificar se o nome dos clientesLeilao nao e igual ao email
 	            		if (sk != x) {
 	                        PrintWriter skout = new PrintWriter(sk.getOutputStream());
@@ -153,9 +154,9 @@ public class ServidorStub implements interfaceGlobal{
 	                }
             	}
             	else{
-            		/*this.clientesLeilao.put(,);*/
-            		/*este put é: se o cliente ja existir neste map fica com o maior valor, senao inclui-o pela primeira vez
-            		nao precisando de comecar o leilao, so se vai introduzir nele*/
+            		this.clientesLeilao.put(,);
+            		este put é: se o cliente ja existir neste map fica com o maior valor, senao inclui-o pela primeira vez
+            		nao precisando de comecar o leilao, so se vai introduzir nele
             	}
             }
         }
@@ -166,7 +167,7 @@ public class ServidorStub implements interfaceGlobal{
         //se nao houver servidores para leilao livres, comeca o leilao
 
         return resultado;
-    }
+    }*/
 
     //cliente quer sair, usando um exit
     // retorna a posicao do servidor que libertou

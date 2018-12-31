@@ -62,42 +62,46 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ServidorStub.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2465">
-              <caret line="98" column="32" lean-forward="true" selection-start-line="98" selection-start-column="32" selection-end-line="98" selection-end-column="32" />
+            <state relative-caret-position="435">
+              <caret line="113" column="12" lean-forward="true" selection-start-line="113" selection-start-column="12" selection-end-line="113" selection-end-column="12" />
               <folding>
-                <element signature="e#1487#1488#0" expanded="true" />
-                <element signature="e#1526#1527#0" expanded="true" />
-                <element signature="e#1562#1563#0" expanded="true" />
-                <element signature="e#1598#1599#0" expanded="true" />
-                <element signature="e#1727#1728#0" expanded="true" />
-                <element signature="e#1769#1770#0" expanded="true" />
-                <element signature="e#1824#1825#0" expanded="true" />
-                <element signature="e#1868#1869#0" expanded="true" />
-                <element signature="e#1859#1860#0" expanded="true" />
-                <element signature="e#1903#1904#0" expanded="true" />
-                <element signature="e#1944#1945#0" expanded="true" />
-                <element signature="e#1978#1979#0" expanded="true" />
-                <element signature="e#3377#3378#0" expanded="true" />
-                <element signature="e#3435#3436#0" expanded="true" />
-                <element signature="e#3488#3489#0" expanded="true" />
-                <element signature="e#3547#3548#0" expanded="true" />
-                <element signature="e#4743#4744#0" expanded="true" />
-                <element signature="e#4858#4859#0" expanded="true" />
-                <element signature="e#4972#4973#0" expanded="true" />
-                <element signature="e#5114#5115#0" expanded="true" />
+                <element signature="e#1524#1525#0" expanded="true" />
+                <element signature="e#1563#1564#0" expanded="true" />
+                <element signature="e#1599#1600#0" expanded="true" />
+                <element signature="e#1635#1636#0" expanded="true" />
+                <element signature="e#1671#1672#0" expanded="true" />
+                <element signature="e#1713#1714#0" expanded="true" />
+                <element signature="e#1768#1769#0" expanded="true" />
+                <element signature="e#1812#1813#0" expanded="true" />
+                <element signature="e#1860#1861#0" expanded="true" />
+                <element signature="e#1904#1905#0" expanded="true" />
+                <element signature="e#1945#1946#0" expanded="true" />
+                <element signature="e#1991#1992#0" expanded="true" />
+                <element signature="e#3767#3768#0" expanded="true" />
+                <element signature="e#3825#3826#0" expanded="true" />
+                <element signature="e#3878#3879#0" expanded="true" />
+                <element signature="e#3937#3938#0" expanded="true" />
+                <element signature="e#6081#6082#0" expanded="true" />
+                <element signature="e#6121#6122#0" expanded="true" />
+                <element signature="e#6196#6197#0" expanded="true" />
+                <element signature="e#6236#6237#0" expanded="true" />
+                <element signature="e#6310#6311#0" expanded="true" />
+                <element signature="e#6350#6351#0" expanded="true" />
+                <element signature="e#6453#6454#0" expanded="true" />
+                <element signature="e#6494#6495#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Catalogo.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="327">
-              <caret line="72" column="47" lean-forward="true" selection-start-line="72" selection-start-column="47" selection-end-line="72" selection-end-column="47" />
+            <state relative-caret-position="269">
+              <caret line="56" column="81" lean-forward="true" selection-start-line="56" selection-start-column="81" selection-end-line="56" selection-end-column="81" />
               <folding>
                 <element signature="e#1436#1437#0" expanded="true" />
                 <element signature="e#1480#1481#0" expanded="true" />
@@ -146,8 +150,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="94" />
-    <option name="y" value="79" />
+    <option name="x" value="52" />
+    <option name="y" value="42" />
     <option name="width" value="1740" />
     <option name="height" value="955" />
   </component>
@@ -188,7 +192,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1546206316333" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1546216586440" />
     <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors" />
   </component>
   <component name="RunDashboard">
@@ -239,8 +243,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="94" y="79" width="1740" height="955" extended-state="0" />
-    <editor active="true" />
+    <frame x="52" y="42" width="1740" height="955" extended-state="0" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14821428" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -309,10 +312,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Reader.java">
+    <entry file="file://$PROJECT_DIR$/src/Cliente.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-116">
-          <caret line="14" column="19" lean-forward="true" selection-start-line="14" selection-start-column="19" selection-end-line="14" selection-end-column="19" />
+        <state relative-caret-position="1189">
+          <caret line="65" column="36" lean-forward="true" selection-start-line="65" selection-start-column="36" selection-end-line="65" selection-end-column="36" />
         </state>
       </provider>
     </entry>
@@ -326,10 +329,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Cliente.java">
+    <entry file="file://$PROJECT_DIR$/src/Reader.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1189">
-          <caret line="65" column="36" lean-forward="true" selection-start-line="65" selection-start-column="36" selection-end-line="65" selection-end-column="36" />
+        <state relative-caret-position="-116">
+          <caret line="14" column="19" lean-forward="true" selection-start-line="14" selection-start-column="19" selection-end-line="14" selection-end-column="19" />
         </state>
       </provider>
     </entry>
@@ -350,42 +353,46 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Catalogo.java">
+    <entry file="file://$PROJECT_DIR$/src/ServidorStub.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="327">
-          <caret line="72" column="47" lean-forward="true" selection-start-line="72" selection-start-column="47" selection-end-line="72" selection-end-column="47" />
+        <state relative-caret-position="435">
+          <caret line="113" column="12" lean-forward="true" selection-start-line="113" selection-start-column="12" selection-end-line="113" selection-end-column="12" />
           <folding>
-            <element signature="e#1436#1437#0" expanded="true" />
-            <element signature="e#1480#1481#0" expanded="true" />
+            <element signature="e#1524#1525#0" expanded="true" />
+            <element signature="e#1563#1564#0" expanded="true" />
+            <element signature="e#1599#1600#0" expanded="true" />
+            <element signature="e#1635#1636#0" expanded="true" />
+            <element signature="e#1671#1672#0" expanded="true" />
+            <element signature="e#1713#1714#0" expanded="true" />
+            <element signature="e#1768#1769#0" expanded="true" />
+            <element signature="e#1812#1813#0" expanded="true" />
+            <element signature="e#1860#1861#0" expanded="true" />
+            <element signature="e#1904#1905#0" expanded="true" />
+            <element signature="e#1945#1946#0" expanded="true" />
+            <element signature="e#1991#1992#0" expanded="true" />
+            <element signature="e#3767#3768#0" expanded="true" />
+            <element signature="e#3825#3826#0" expanded="true" />
+            <element signature="e#3878#3879#0" expanded="true" />
+            <element signature="e#3937#3938#0" expanded="true" />
+            <element signature="e#6081#6082#0" expanded="true" />
+            <element signature="e#6121#6122#0" expanded="true" />
+            <element signature="e#6196#6197#0" expanded="true" />
+            <element signature="e#6236#6237#0" expanded="true" />
+            <element signature="e#6310#6311#0" expanded="true" />
+            <element signature="e#6350#6351#0" expanded="true" />
+            <element signature="e#6453#6454#0" expanded="true" />
+            <element signature="e#6494#6495#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ServidorStub.java">
+    <entry file="file://$PROJECT_DIR$/src/Catalogo.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2465">
-          <caret line="98" column="32" lean-forward="true" selection-start-line="98" selection-start-column="32" selection-end-line="98" selection-end-column="32" />
+        <state relative-caret-position="269">
+          <caret line="56" column="81" lean-forward="true" selection-start-line="56" selection-start-column="81" selection-end-line="56" selection-end-column="81" />
           <folding>
-            <element signature="e#1487#1488#0" expanded="true" />
-            <element signature="e#1526#1527#0" expanded="true" />
-            <element signature="e#1562#1563#0" expanded="true" />
-            <element signature="e#1598#1599#0" expanded="true" />
-            <element signature="e#1727#1728#0" expanded="true" />
-            <element signature="e#1769#1770#0" expanded="true" />
-            <element signature="e#1824#1825#0" expanded="true" />
-            <element signature="e#1868#1869#0" expanded="true" />
-            <element signature="e#1859#1860#0" expanded="true" />
-            <element signature="e#1903#1904#0" expanded="true" />
-            <element signature="e#1944#1945#0" expanded="true" />
-            <element signature="e#1978#1979#0" expanded="true" />
-            <element signature="e#3377#3378#0" expanded="true" />
-            <element signature="e#3435#3436#0" expanded="true" />
-            <element signature="e#3488#3489#0" expanded="true" />
-            <element signature="e#3547#3548#0" expanded="true" />
-            <element signature="e#4743#4744#0" expanded="true" />
-            <element signature="e#4858#4859#0" expanded="true" />
-            <element signature="e#4972#4973#0" expanded="true" />
-            <element signature="e#5114#5115#0" expanded="true" />
+            <element signature="e#1436#1437#0" expanded="true" />
+            <element signature="e#1480#1481#0" expanded="true" />
           </folding>
         </state>
       </provider>
