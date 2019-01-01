@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
@@ -9,7 +10,7 @@ import java.util.HashMap;
 public class Servidor implements Runnable {
 
     private final Socket x;
-    private ServidorStub st;
+    private final ServidorStub st;
     private long inicialTime = 0,finalTime = 0;
 
     public Servidor(Socket x, ServidorStub st){
@@ -28,13 +29,13 @@ public class Servidor implements Runnable {
         }
     }
 
+    @Override
     public void run(){
         try {
             String email = null;
             PrintWriter out = new PrintWriter(x.getOutputStream());
             BufferedReader in = new BufferedReader(new InputStreamReader(x.getInputStream()));
             String s;
-
             while (true) {
                 s = in.readLine();
                 String[] p = s.split(" ");
@@ -43,6 +44,7 @@ public class Servidor implements Runnable {
                         int resregista = st.registaCliente(p[1], p[2]);
                         s = Integer.toString(resregista);
                         break;
+                        
                     case "autentica":
                         int resautentica = st.autenticaCliente(p[1], p[2]);
                         if (resautentica == 0) {
@@ -51,14 +53,14 @@ public class Servidor implements Runnable {
                         }
                         s = Integer.toString(resautentica);
                         break;
+                        
                     case "pedir":
                         s = st.reservarPorPedido(email, p[1]);
                         inicialTime = System.currentTimeMillis();
                         break;
                     
                     case "libertar":
-                        s = st.libertaReserva(email, p[1]);
-                        
+                        s = st.libertaReserva(email, p[1]);   
                         if(inicialTime == 0);
                         else if (!s.equals("")) {
                             finalTime = (System.currentTimeMillis() - inicialTime) / 1000;
@@ -70,19 +72,19 @@ public class Servidor implements Runnable {
                     
                     case "divida":
                         double divida = st.getValorDivida(email);
-                        
                         s = "Tem uma divida de: " + divida + "euros";
-                        
                         break;
+                        
                     case "leilao": // So um teste de fazer broadcast de mensagens NAO E O FUNCIONAMENTO DO LEILAO
                         s = st.leilao(email, String.valueOf(p[1]),p[2]);
                         //s = "licitacao feita";
                         break;
+                        
                     case "exit":
                         s = "exit";
                         break;
+                        
                     default:
-
                 }
                 out.println(s);
                 out.flush();
@@ -92,7 +94,7 @@ public class Servidor implements Runnable {
             out.close();
             in.close();
         }
-        catch (Exception e){
+        catch (IOException | NumberFormatException e){
             e.printStackTrace();
         }
     }
