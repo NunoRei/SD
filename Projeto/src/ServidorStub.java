@@ -6,25 +6,23 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  *
- * @author JoÃ£o Marques, Nuno Rei, Jaime Leite e Hugo Nogueira
+ * @author João Marques, Nuno Rei, Jaime Leite e Hugo Nogueira
  */
 
 public class ServidorStub implements interfaceGlobal{
 
     //map que contem clientes que fazem parte do sistema
     private Map<String, Cliente> clientes = new HashMap<>();
-    private final Lock lClientesAtivos = new ReentrantLock();
     /* Clientes que se encontram ativos no sistema */
     public Map<String, Socket> clientesativos = new HashMap<>();
-    private final Lock lClientesLeilao = new ReentrantLock();
+    //clientes conectados e à espera, que pretendem obter servidor por pedido
+    private Map<String, Socket> clientesPedido = new HashMap<>();
     //fila diferente da seguinte da anterior, pois aqui os clientes so entram quando estao a participar num leilao
     //clientes conectados e que pretendem obtrer servidor em leilao
-    private Map<String, Double> clientesLeilao = new HashMap<>();
+    private Map<String, Socket> clientesLeilao = new HashMap<>();
     private Catalogo cat = new Catalogo();
 
     private String clienteAtual;
@@ -54,7 +52,7 @@ public class ServidorStub implements interfaceGlobal{
         public double getDivida(){
             return this.divida;
         }
-        
+
         public void setDivida(double divida){
             this.divida = divida;
         }
@@ -85,7 +83,7 @@ public class ServidorStub implements interfaceGlobal{
         Cliente c;
         if ((c = clientes.get(email)) == null) return 1;
         else if ((c.getPassword().equals(pass)) && !clientesativos.containsKey(email)) return 0;
-            else return 1;
+        else return 1;
     }
 
     @Override
@@ -93,8 +91,26 @@ public class ServidorStub implements interfaceGlobal{
         String resultado = null;
         try {
             resultado = cat.reservaPedido(type);
-            if (!resultado.equals(""))
+            if (!resultado.equals("")) {
                 clientes.get(email).setIdservidor(resultado);
+                resultado = "id para libertar: " + resultado;
+            }
+            else resultado = "Servidor inexistente";
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resultado;
+    }
+
+    public String reservarLeilao(String email, String type, String valor) {
+        String resultado = null;
+        try {
+            resultado = cat.reservaLeilao(email,type,Double.parseDouble(valor));
+            if (!resultado.equals("")) {
+                clientes.get(email).setIdservidor(resultado);
+                resultado = "id para libertar: " + resultado;
+            }
             else resultado = "Servidor inexistente";
         }
         catch (Exception e) {
@@ -107,38 +123,19 @@ public class ServidorStub implements interfaceGlobal{
     public String libertaReserva(String email, String id){
         String resultado = "";
         try {
-        	//libertar um servidor do map cat.pedido
-            if (clientes.get(email).getIdservidor().equals(id) && !id.equals("t4")){
-                cat.libertaReserva(id);
-                clientes.get(email).setIdservidor("");
-                double precoServer = cat.getPrice(id);
-                resultado += precoServer;
-            }
-            
-            //libertar um servidor do map cat.leilao
-            if (clientes.get(email).getIdservidor().equals(id) && id.equals("t4")){
-                cat.libertaReserva(id);
-                clientes.get(email).setIdservidor("");
-                double precoServer = cat.getPrice(id);
-                resultado += precoServer;
-                
-                //se nao estiver vazio, atribui o servidor ao que cliente que tiver dado maior oferta
-                if(this.clientesLeilao.isEmpty() == false){
-                	double maiorOferta = 0;
-                	String clienteMaiorOferta = "";
-                	
-                	for (Map.Entry<String, Double> cliente : this.clientesLeilao.entrySet()){
-                		if (cliente.getValue() > maiorOferta) {
-                			maiorOferta = cliente.getValue();
-                			clienteMaiorOferta = cliente.getKey();
-                		}
-                	}
-	                	clientes.get(clienteMaiorOferta).setIdservidor(id);
-	                	PrintWriter skout = new PrintWriter(this.clientesativos.get(clienteMaiorOferta).getOutputStream());
-	                    skout.println("Obteve o servidor que pretendia");
-	                    skout.flush();
-                
-                	this.clientesLeilao.clear();
+            if (clientes.get(email).getIdservidor().equals(id)) {
+                String[] p = id.split(" ");
+                if (id.contains("l")) {
+                    cat.libertaReservaLeilao(id);
+                    clientes.get(email).setIdservidor("");
+                    double precoServer = cat.getPrice(id);
+                    resultado += precoServer;
+                }
+                else {
+                    cat.libertaReservaPedido(id);
+                    clientes.get(email).setIdservidor("");
+                    double precoServer = cat.getPrice(id);
+                    resultado += precoServer;
                 }
             }
         }
@@ -147,86 +144,67 @@ public class ServidorStub implements interfaceGlobal{
         }
         return resultado;
     }
-    
+
     public void setValorDivida(String email, double divida){
         this.clientes.get(email).setDivida(divida);
     }
-    
+
     public double getValorDivida(String email){
         return this.clientes.get(email).getDivida();
     }
 
-    public String leilao(String email, String preco, String type){
-        String resultado = null;
-        try {
-            resultado = cat.reservaLeilao(type);
-            
-            //se houver servidores livres, coloca logo lá o cliente
-            if (!resultado.equals("Indisponível"))
-                clientes.get(email).setIdservidor(resultado);
-            
-            //se nao houver servidores livres, nao coloca lá o cliente e comeca o leilao
-            else{
-            	//se map clientesLeilao estiver vazio, significa que o cliente pode comecar leilao, senao vai incluir-se em leilao
-            	if(this.clientesLeilao.isEmpty() == true){
-            		this.clientesLeilao.put(email, Double.parseDouble(preco));
-	            	for (Map.Entry<String, Socket> cliente : this.clientesativos.entrySet()){
-	                    //aqui verificar se o nome dos clientesLeilao nao e igual ao email
-	            		if (!cliente.getKey().equals(email)) {
-	                        PrintWriter skout = new PrintWriter(cliente.getValue().getOutputStream());
-	                        skout.println("all: Leilao iniciado");
-	                        skout.flush();
-	                    }
-	                }
-            	}
-            	else
-            		lClientesLeilao.lock();
-            			this.clientesLeilao.put(email, Double.parseDouble(preco));
-            		lClientesLeilao.unlock();
-            }
+    public void logOut(String email) {
+        Cliente cliente = this.clientes.get(email);
+        if (!cliente.getIdservidor().equals("")) {
+            libertaReserva(email,cliente.getIdservidor());
         }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        //se nao houver servidores para leilao livres, comeca o leilao
-
-        return resultado;
+        this.clientesativos.remove(email);
     }
+
+    /*metodo chamado quando um cliente quer iniciar ou entrar num leilao por um servidor
+      retorna 0 se cliente consegue iniciar ou entrar num leilao
+      retorna 1 se n houver servidores daquele tipo disponiveis para leilao*/
+    /*public int reservarPorLeilao(String email, double preco, String type){
+        if(this.cat.existeServer(type) < 0){
+        //o cliente vai a leilao para tentar ficar com o servidor
+    }
+
+        return 0;
+    }*/
 
     //cliente quer sair, usando um exit
     // retorna a posicao do servidor que libertou
     public int retiraServidorExit(String email) {
            /*
        quando o cliente sai do sistema, avisa os outros que pretendem obter um servidor do tipo que ele tem, ou seja,
-       faz um notify, ou para os que reservaram a pedido, para aqueles que estÃ£o em leilÃ£o  
+       faz um notify, ou para os que reservaram a pedido, para aqueles que estão em leilão
         */
-           
-           return 0;
+
+        return 0;
     }
 
     //Colocar o cliente no servidor
     public void addCliente(String nome) {
         this.clienteAtual = nome;
     }
-    
+
     //Retirar o cliente do servidor
     public void removeCliente() {
         this.clienteAtual = null;
     }
-    
+
     //Retornar nome do cliente
     public String getClienteAtual() {
         return this.clienteAtual;
     }
-    
-    //Atualizar preÃ§o por hora em caso de leilÃ£o
+
+    //Atualizar preço por hora em caso de leilão
     public void setPricePerHour(float price) {
         this.pricePerHour = price;
     }
-    
+
     //Enquanto o cliente estiver a escrever para o servidor
-    //Falta colocar Times para calcular o tempo que o cliente esteve no servidor para adicionar hÃ¡ sua dÃ­vida
+    //Falta colocar Times para calcular o tempo que o cliente esteve no servidor para adicionar há sua dívida
     /*public float init(int port) throws IOException {
         SS = new ServerSocket(port);
         Socket x;

@@ -55,10 +55,10 @@ public class Servidor implements Runnable {
                         s = st.reservarPorPedido(email, p[1]);
                         inicialTime = System.currentTimeMillis();
                         break;
-                    
+
                     case "libertar":
                         s = st.libertaReserva(email, p[1]);
-                        
+
                         if(inicialTime == 0);
                         else if (!s.equals("")) {
                             finalTime = (System.currentTimeMillis() - inicialTime) / 1000;
@@ -67,16 +67,23 @@ public class Servidor implements Runnable {
                         }
                         else s = "Identificador de Servidor invalido";
                         break;
-                    
+
                     case "divida":
                         double divida = st.getValorDivida(email);
-                        
+
                         s = "Tem uma divida de: " + divida + "euros";
-                        
+
                         break;
                     case "leilao": // So um teste de fazer broadcast de mensagens NAO E O FUNCIONAMENTO DO LEILAO
-                        s = st.leilao(email, String.valueOf(p[1]),p[2]);
-                        //s = "licitacao feita";
+                        /*for (Socket sk : st.clientesativos.values()) {
+                            if (sk != x) {
+                                PrintWriter skout = new PrintWriter(sk.getOutputStream());
+                                skout.println("all: Leilao iniciado");
+                                skout.flush();
+                            }
+                        }*/
+                        s = st.reservarLeilao(email, p[1], p[2]);
+                        inicialTime = System.currentTimeMillis();
                         break;
                     case "exit":
                         s = "exit";
@@ -88,7 +95,7 @@ public class Servidor implements Runnable {
                 out.flush();
                 if (p[0].equals("exit")) break;
             }
-            st.clientesativos.remove(email);
+            st.logOut(email);
             out.close();
             in.close();
         }

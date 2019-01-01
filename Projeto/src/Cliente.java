@@ -60,7 +60,7 @@ public class Cliente {
                         if (aut == 0) {
                             System.out.println("Autenticado com sucesso");
                         }*/
-                        String resulleilao = c.leilao();
+                        String resulleilao = c.reservarLeilao(email,p[1],p[2]);
                         System.out.println(resulleilao);
                         break;
                     case "libertar":

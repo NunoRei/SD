@@ -7,4 +7,5 @@ public interface interfaceGlobal {
     int autenticaCliente(String email, String pass);
     String reservarPorPedido(String email, String type);
     String libertaReserva(String email, String id);
+    String reservarLeilao(String email, String type, String valor);
 }

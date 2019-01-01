@@ -159,27 +159,23 @@ public class ClienteStub implements interfaceGlobal{
         return resposta;
     }
 
-    public int reservarPorLeilao(String email, double quantia, String type){
-        String pedido = "servidor_Leilao ";
-        pedido+=email;
-        pedido+= " ";
-        pedido+=quantia;
+    public String reservarLeilao(String email, String type, String valor){
+        String pedido = "leilao";
         pedido+= " ";
         pedido+=type;
+        pedido+= " ";
+        pedido+=valor;
 
         out.println(pedido);
         out.flush();
 
-        while (received.isEmpty());
-        String resposta = received.remove();
-
-        /*try {
-            resposta = in.readLine();
-        }
-        catch (IOException e) {
+        String resposta = null;
+        try {
+            resposta = takeMessage();
+        } catch (InterruptedException e) {
             e.printStackTrace();
-        }*/
-        return Integer.parseInt(resposta);
+        }
+        return resposta;
     }
 
     public int retiraServidorExit(String email){
@@ -216,24 +212,6 @@ public class ClienteStub implements interfaceGlobal{
             e.printStackTrace();
         }*/
         return Integer.parseInt(resposta);
-    }
-
-    //@Override
-    public String leilao (){
-        String pedido = "leilao ";
-
-        out.println(pedido);
-        out.flush();
-
-        while (received.isEmpty());
-        String resposta = received.remove();
-        /*try {
-            resposta = in.readLine();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }*/
-        return resposta;
     }
 
     public void exit () {
