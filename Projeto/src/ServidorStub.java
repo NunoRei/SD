@@ -17,6 +17,8 @@ public class ServidorStub implements interfaceGlobal{
     //map que contem clientes que fazem parte do sistema
     private Map<String, Cliente> clientes = new HashMap<>();
     /* Clientes que se encontram ativos no sistema */
+    private final Lock lClientesAtivos = new ReentrantLock();
+    // Clientes que se encontram ativos no sistema
     public Map<String, Socket> clientesativos = new HashMap<>();
     //clientes conectados e à espera, que pretendem obter servidor por pedido
     private Map<String, Socket> clientesPedido = new HashMap<>();
@@ -66,7 +68,6 @@ public class ServidorStub implements interfaceGlobal{
         }
     }
 
-
     @Override
     public int registaCliente(String email, String pass) {
         Cliente c;
@@ -113,7 +114,7 @@ public class ServidorStub implements interfaceGlobal{
             }
             else resultado = "Servidor inexistente";
         }
-        catch (Exception e) {
+        catch (InterruptedException e) {
             e.printStackTrace();
         }
         return resultado;
@@ -139,7 +140,7 @@ public class ServidorStub implements interfaceGlobal{
                 }
             }
         }
-        catch (Exception e) {
+        catch (IOException e) {
             e.printStackTrace();
         }
         return resultado;
@@ -161,17 +162,6 @@ public class ServidorStub implements interfaceGlobal{
         this.clientesativos.remove(email);
     }
 
-    /*metodo chamado quando um cliente quer iniciar ou entrar num leilao por um servidor
-      retorna 0 se cliente consegue iniciar ou entrar num leilao
-      retorna 1 se n houver servidores daquele tipo disponiveis para leilao*/
-    /*public int reservarPorLeilao(String email, double preco, String type){
-        if(this.cat.existeServer(type) < 0){
-        //o cliente vai a leilao para tentar ficar com o servidor
-    }
-
-        return 0;
-    }*/
-
     //cliente quer sair, usando um exit
     // retorna a posicao do servidor que libertou
     public int retiraServidorExit(String email) {
@@ -179,7 +169,6 @@ public class ServidorStub implements interfaceGlobal{
        quando o cliente sai do sistema, avisa os outros que pretendem obter um servidor do tipo que ele tem, ou seja,
        faz um notify, ou para os que reservaram a pedido, para aqueles que estão em leilão
         */
-
         return 0;
     }
 

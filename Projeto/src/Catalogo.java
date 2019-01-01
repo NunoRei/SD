@@ -127,14 +127,6 @@ public class Catalogo {
 		if (id.contains("l")) return this.leilao.get(id).getPreco();
 		return this.pedido.get(id).getPreco();
 	}
-	    /*//retorna > 0 se há servidores daquele tipo livres e 0 caso contrário
-	    public int existeServer(String type){
-	        int i;
-	        for(i=0; i<this.servidores.size(); i++){
-	            if(this.servidores.get(i).getType().equals(type) && this.servidores.get(i).getQuantidade() > 0) return 1;
-	        }
-	        return 0;
-	    }*/
 
 	public String reservaPedido(String type) throws InterruptedException {
 		l.lock();
@@ -199,5 +191,4 @@ public class Catalogo {
 		finally {
 			l.unlock();
 		}
-	}
 }

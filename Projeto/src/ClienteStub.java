@@ -1,5 +1,5 @@
 import java.io.BufferedReader;
-import java.io.IOException;
+//import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -18,7 +18,7 @@ public class ClienteStub implements interfaceGlobal{
     private final PrintWriter out;
     private final BufferedReader in;
     private int qsize = 0;
-    private Queue<String> received;
+    private final Queue<String> received;
     private final Lock l = new ReentrantLock();
     private final Condition notEmpty = l.newCondition();
 
@@ -39,71 +39,59 @@ public class ClienteStub implements interfaceGlobal{
     //Criação de um Cliente
     @Override
     public int registaCliente(String email, String pass){
-        String pedido = "regista ";
-        pedido+=email;
-        pedido+= " ";
-        pedido+=pass;
-
+        String pedido = "regista "+email+" "+pass;
         out.println(pedido);
         out.flush();
-
         //while (received.isEmpty());
-        String resposta = null;
+        String resposta;
+        int res = 0;
         try {
             resposta = takeMessage();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            res = Integer.parseInt(resposta);
         }
+        catch (InterruptedException | NumberFormatException e) {}
         /*try {
             resposta = in.readLine();
         }
         catch (IOException e) {
             e.printStackTrace();
         }*/
-        return Integer.parseInt(resposta);
+        
+        return res;
     }
 
     @Override
     public int autenticaCliente(String email, String pass){
-        String pedido = "autentica ";
-        pedido+=email;
-        pedido+= " ";
-        pedido+=pass;
-
+        String pedido = "autentica "+email+" "+pass;
         out.println(pedido);
         out.flush();
-
         //while (received.isEmpty());
-        String resposta = null;
+        String resposta;
+        int res = 0;
         try {
             resposta = takeMessage();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            res = Integer.parseInt(resposta);
         }
-
+        catch (InterruptedException e) {}
         /*try {
             resposta = in.readLine();
         }
         catch (IOException e) {
             e.printStackTrace();
         }*/
-        return Integer.parseInt(resposta);
+        return res;
     }
 
     @Override
      public String reservarPorPedido(String email, String type){
-        String pedido = "pedir ";
-        pedido+=type;
-
+        String pedido = "pedir "+type;
         out.println(pedido);
         out.flush();
-
         String resposta = null;
         try {
             resposta = takeMessage();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }       
+        }
+        catch (InterruptedException e) {}       
          /*try {
             resposta = in.readLine();
         }
@@ -115,21 +103,16 @@ public class ClienteStub implements interfaceGlobal{
 
     @Override
     public String libertaReserva(String email, String id){
-        String pedido = "libertar ";
-        pedido+=id;
-
+        String pedido = "libertar "+id;
         out.println(pedido);
         out.flush();
-
         //while (received.isEmpty());
         String resposta = null;
         try {
             resposta = takeMessage();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
-
-         /*try {
+        catch (InterruptedException e) {}
+        /*try {
             resposta = in.readLine();
         }
         catch (IOException e) {
@@ -140,17 +123,14 @@ public class ClienteStub implements interfaceGlobal{
     
     public String obterDivida(){
         String pedido = "divida ";
-
         out.println(pedido);
         out.flush();
-
         String resposta = null;
         try {
             resposta = takeMessage();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
-         /*try {
+        catch (InterruptedException e) {}
+        /*try {
             resposta = in.readLine();
         }
         catch (IOException e) {
@@ -178,45 +158,50 @@ public class ClienteStub implements interfaceGlobal{
         return resposta;
     }
 
+    @SuppressWarnings("empty-statement")
     public int retiraServidorExit(String email){
-        String pedido = "exit ";
-        pedido+=email;
-
+        String pedido = "exit "+email;
         out.println(pedido);
         out.flush();
-
         while (received.isEmpty());
         String resposta = received.remove();
+        int res = 0;
+        try {
+            res = Integer.parseInt(resposta);
+        }
+        catch (NumberFormatException e) {}
         /*try {
             resposta = in.readLine();
         }
         catch (IOException e) {
             e.printStackTrace();
         }*/
-        return Integer.parseInt(resposta);
+        return res;
     }
 
+    @SuppressWarnings("empty-statement")
     public int retiraServidorNull(){
         String pedido = null;
-
         out.println(pedido);
         out.flush();
-
         while (received.isEmpty());
         String resposta = received.remove();
-
+        int res = 0;
+        try {
+            res = Integer.parseInt(resposta);
+        }
+        catch (NumberFormatException e) {}
         /*try {
             resposta = in.readLine();
         }
         catch (IOException e) {
             e.printStackTrace();
         }*/
-        return Integer.parseInt(resposta);
+        return res;
     }
 
     public void exit () {
         String pedido = "exit";
-
         out.println(pedido);
         out.flush();
     }
