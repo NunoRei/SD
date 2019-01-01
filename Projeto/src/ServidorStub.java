@@ -1,26 +1,26 @@
-import java.io.BufferedReader;
+//import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
+//import java.io.InputStreamReader;
+//import java.io.PrintWriter;
+//import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.locks.*;
 
 /**
  *
- * @author João Marques, Nuno Rei, Jaime Leite e Hugo Nogueira
+ * @author JoÃ£o Marques, Nuno Rei, Jaime Leite e Hugo Nogueira
+ * @version 01-2019
  */
-
 public class ServidorStub implements interfaceGlobal{
-
     //map que contem clientes que fazem parte do sistema
     private Map<String, Cliente> clientes = new HashMap<>();
     /* Clientes que se encontram ativos no sistema */
     private final Lock lClientesAtivos = new ReentrantLock();
     // Clientes que se encontram ativos no sistema
     public Map<String, Socket> clientesativos = new HashMap<>();
-    //clientes conectados e à espera, que pretendem obter servidor por pedido
+    //clientes conectados e ï¿½ espera, que pretendem obter servidor por pedido
     private Map<String, Socket> clientesPedido = new HashMap<>();
     //fila diferente da seguinte da anterior, pois aqui os clientes so entram quando estao a participar num leilao
     //clientes conectados e que pretendem obtrer servidor em leilao
@@ -31,8 +31,8 @@ public class ServidorStub implements interfaceGlobal{
     private float pricePerHour;
 
     private static class Cliente {
-        private String email;
-        private String password;
+        private final String email;
+        private final String password;
         private String idservidor; // string vazia se nao tiver nenhum
         private double divida;
 
@@ -123,25 +123,20 @@ public class ServidorStub implements interfaceGlobal{
     @Override
     public String libertaReserva(String email, String id){
         String resultado = "";
-        try {
-            if (clientes.get(email).getIdservidor().equals(id)) {
-                String[] p = id.split(" ");
-                if (id.contains("l")) {
-                    cat.libertaReservaLeilao(id);
-                    clientes.get(email).setIdservidor("");
-                    double precoServer = cat.getPrice(id);
-                    resultado += precoServer;
-                }
-                else {
-                    cat.libertaReservaPedido(id);
-                    clientes.get(email).setIdservidor("");
-                    double precoServer = cat.getPrice(id);
-                    resultado += precoServer;
-                }
+        if (clientes.get(email).getIdservidor().equals(id)) {
+            String[] p = id.split(" ");
+            if (id.contains("l")) {
+                cat.libertaReservaLeilao(id);
+                clientes.get(email).setIdservidor("");
+                double precoServer = cat.getPrice(id);
+                resultado += precoServer;
             }
-        }
-        catch (IOException e) {
-            e.printStackTrace();
+            else {
+                cat.libertaReservaPedido(id);
+                clientes.get(email).setIdservidor("");
+                double precoServer = cat.getPrice(id);
+                resultado += precoServer;
+            }
         }
         return resultado;
     }
@@ -167,7 +162,7 @@ public class ServidorStub implements interfaceGlobal{
     public int retiraServidorExit(String email) {
            /*
        quando o cliente sai do sistema, avisa os outros que pretendem obter um servidor do tipo que ele tem, ou seja,
-       faz um notify, ou para os que reservaram a pedido, para aqueles que estão em leilão
+       faz um notify, ou para os que reservaram a pedido, para aqueles que estï¿½o em leilï¿½o
         */
         return 0;
     }
@@ -187,13 +182,13 @@ public class ServidorStub implements interfaceGlobal{
         return this.clienteAtual;
     }
 
-    //Atualizar preço por hora em caso de leilão
+    //Atualizar preï¿½o por hora em caso de leilï¿½o
     public void setPricePerHour(float price) {
         this.pricePerHour = price;
     }
 
     //Enquanto o cliente estiver a escrever para o servidor
-    //Falta colocar Times para calcular o tempo que o cliente esteve no servidor para adicionar há sua dívida
+    //Falta colocar Times para calcular o tempo que o cliente esteve no servidor para adicionar hï¿½ sua dï¿½vida
     /*public float init(int port) throws IOException {
         SS = new ServerSocket(port);
         Socket x;

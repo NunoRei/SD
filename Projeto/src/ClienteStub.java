@@ -12,6 +12,7 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  *
  * @author João Marques, Nuno Rei, Jaime Leite e Hugo Nogueira
+ * @version 01-2019
  */
 public class ClienteStub implements interfaceGlobal{
     private final Socket x;

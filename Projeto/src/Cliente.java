@@ -11,7 +11,6 @@
  * @author João Marques, Nuno Rei, Jaime Leite e Hugo Nogueira
  * @version 01-2019
  */
-
 public class Cliente {
 
     public static void main(String[] args) throws Exception {

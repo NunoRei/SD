@@ -7,8 +7,12 @@ import java.net.Socket;
 import java.util.Map;
 import java.util.HashMap;
 
+/**
+ *
+ * @author João Marques, Nuno Rei, Jaime Leite e Hugo Nogueira
+ * @version 01-2019
+ */
 public class Servidor implements Runnable {
-
     private final Socket x;
     private final ServidorStub st;
     private long inicialTime = 0,finalTime = 0;
