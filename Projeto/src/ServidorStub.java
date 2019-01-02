@@ -40,7 +40,7 @@ public class ServidorStub implements interfaceGlobal{
             this.email = email;
             this.password = pass;
             this.idservidor = "";
-            this.divida = 0;
+            this.divida = 0.0;
         }
 
         public String getPassword() {
@@ -142,11 +142,22 @@ public class ServidorStub implements interfaceGlobal{
     }
 
     public void setValorDivida(String email, double divida){
-        this.clientes.get(email).setDivida(divida);
+        double dividaAcumulada = this.getValorDivida(email);
+        this.clientes.get(email).setDivida(dividaAcumulada + divida);
     }
 
     public double getValorDivida(String email){
         return this.clientes.get(email).getDivida();
+    }
+
+    //retorna o preco a que o cliente reservou o server que possui, caso possua algum
+    public double temServidor(String email){
+        //vejo se cliente tem ou não servidor
+        if(!this.clientes.get(email).getIdservidor().equals("")){
+            return this.cat.getPrice(this.clientes.get(email).getIdservidor());
+        }
+
+        return 0;
     }
 
     public void logOut(String email) {
