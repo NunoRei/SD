@@ -82,7 +82,8 @@ public class Catalogo {
 			//lp.lock();
 			//try {
 			this.propostas.put(email, valor);
-			calcMaiorLicitante();
+			if (propostas.size() == 1) this.nextclient = email;
+			//calcMaiorLicitante();
 			//} finally {
 			//	lp.unlock();
 			//}
