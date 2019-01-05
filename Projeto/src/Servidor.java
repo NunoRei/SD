@@ -10,10 +10,10 @@ import java.util.HashMap;
 public class Servidor implements Runnable {
 
     private final Socket x;
-    private final ServidorStub st;
+    private final ServidorImpl st;
     private long inicialTime = 0,finalTime = 0;
 
-    public Servidor(Socket x, ServidorStub st){
+    public Servidor(Socket x, ServidorImpl st){
         this.x = x;
         this.st = st;
     }
@@ -21,7 +21,7 @@ public class Servidor implements Runnable {
     public static void main(String[] args) throws Exception {
         Map<String, Socket> cc = new HashMap<>();
         ServerSocket ss = new ServerSocket(12345);
-        ServidorStub st = new ServidorStub();
+        ServidorImpl st = new ServidorImpl();
         while (true){
             Socket x;
             x = ss.accept();

@@ -6,13 +6,15 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  *
  * @author João Marques, Nuno Rei, Jaime Leite e Hugo Nogueira
  */
 
-public class ServidorStub implements interfaceGlobal{
+public class ServidorImpl implements interfaceGlobal{
 
     //map que contem clientes que fazem parte do sistema
     private Map<String, Cliente> clientes = new HashMap<>();
@@ -140,7 +142,7 @@ public class ServidorStub implements interfaceGlobal{
                 }
             }
         }
-        catch (IOException e) {
+        catch (Exception e) {
             e.printStackTrace();
         }
         return resultado;
