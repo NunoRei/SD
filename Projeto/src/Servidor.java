@@ -7,8 +7,12 @@ import java.net.Socket;
 import java.util.Map;
 import java.util.HashMap;
 
+/**
+ *
+ * @author João Marques, Nuno Rei, Jaime Leite e Hugo Nogueira
+ * @version 01-2019
+ */
 public class Servidor implements Runnable {
-
     private final Socket x;
     private final ServidorImpl st;
     private long inicialTime = 0,finalTime = 0;
@@ -31,13 +35,12 @@ public class Servidor implements Runnable {
 
     @Override
     public void run(){
-        try {
+        try{
             String email = null;
             PrintWriter out = new PrintWriter(x.getOutputStream());
             BufferedReader in = new BufferedReader(new InputStreamReader(x.getInputStream()));
             String s;
-            while (true) {
-                s = in.readLine();
+            while ((s = in.readLine()) != null){
                 String[] p = s.split(" ");
                 switch(p[0]) {
                     case "regista":
@@ -71,7 +74,7 @@ public class Servidor implements Runnable {
                         break;
                     case "divida":
                         double divida = st.getValorDivida(email);
-                        s = "Tem uma divida de: " + divida + "euros";
+                        s = "Tem uma divida de: " + divida + "$";
                         break;
                         
                     case "leilao": // So um teste de fazer broadcast de mensagens NAO E O FUNCIONAMENTO DO LEILAO
@@ -88,6 +91,12 @@ public class Servidor implements Runnable {
                         
                     case "exit":
                         s = "exit";
+                        double valor = 0.0;
+                        if((valor = st.temServidor(email)) != 0){
+                            finalTime = (System.currentTimeMillis() - inicialTime) / 1000;
+                            //preço a que o server foi reservado
+                            st.setValorDivida(email, (finalTime * valor));
+                        }
                         break;
                         
                     default:
@@ -96,6 +105,15 @@ public class Servidor implements Runnable {
                 out.flush();
                 if (p[0].equals("exit")) break;
             }
+            
+            //se fizer Control^C e tiver um servidor em sua posse
+            double valor = 0.0;
+            if((valor = st.temServidor(email)) != 0){
+                finalTime = (System.currentTimeMillis() - inicialTime) / 1000;
+                //preço a que o server foi reservado
+                st.setValorDivida(email, (finalTime * valor));
+            }
+
             st.logOut(email);
             out.close();
             in.close();

@@ -9,7 +9,11 @@ import java.io.PrintWriter;
 import java.net.SocketException;
 //import java.util.Queue;
 
-
+/**
+ *
+ * @author João Marques, Nuno Rei, Jaime Leite e Hugo Nogueira
+ * @version 01-2019
+ */
 public class Reader implements Runnable{
     ClienteStub cs;
     Socket socket;

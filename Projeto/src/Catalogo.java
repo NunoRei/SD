@@ -1,10 +1,14 @@
-
 import java.util.Map;
 import java.util.HashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.Condition;
 
+/**
+ *
+ * @author João Marques, Nuno Rei, Jaime Leite e Hugo Nogueira
+ * @version 01-2019
+ */
 public class Catalogo {
 
 	private final int MAX = 2;
@@ -77,8 +81,8 @@ public class Catalogo {
 		public void putProposta(String email, Double valor) {
 			//lp.lock();
 			//try {
-				this.propostas.put(email, valor);
-				calcMaiorLicitante();
+			this.propostas.put(email, valor);
+			calcMaiorLicitante();
 			//} finally {
 			//	lp.unlock();
 			//}
@@ -87,7 +91,7 @@ public class Catalogo {
 		public void removeProposta(String email) {
 			//lp.lock();
 			//try {
-				this.propostas.remove(email);
+			this.propostas.remove(email);
 			//} finally {
 			//	lp.unlock();
 			//}
@@ -97,15 +101,15 @@ public class Catalogo {
 		public void calcMaiorLicitante() {
 			//lp.lock();
 			//try {
-				String next = "";
-				Double res = 0.00;
-				for (Map.Entry<String, Double> licitacao : this.propostas.entrySet()) {
-					if (licitacao.getValue() > res) {
-						res = licitacao.getValue();
-						next = licitacao.getKey();
-					}
+			String next = "";
+			Double res = 0.00;
+			for (Map.Entry<String, Double> licitacao : this.propostas.entrySet()) {
+				if (licitacao.getValue() > res) {
+					res = licitacao.getValue();
+					next = licitacao.getKey();
 				}
-				this.nextclient = next;
+			}
+			this.nextclient = next;
 			//} finally {
 			//	lp.unlock();
 			//}
@@ -147,13 +151,12 @@ public class Catalogo {
 					return s.getType();
 				}
 				return "";
-			}
-			finally {
+			} finally {
 				s.ls.unlock();
 			}
 		} catch (Exception e) {
 			l.unlock();
-	    }
+		}
 		return "";
 	}
 
@@ -175,7 +178,7 @@ public class Catalogo {
 			} finally {
 				sl.lp.unlock();
 			}
-		} catch(Exception e) {
+		} catch (Exception e) {
 			l.unlock();
 			return "";
 		}
