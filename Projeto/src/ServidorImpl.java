@@ -18,7 +18,7 @@ import java.util.concurrent.locks.*;
 public class ServidorImpl implements interfaceGlobal{
     //map que contem clientes que fazem parte do sistema
     private Map<String, Cliente> clientes = new HashMap<>();
-    /* Clientes que se encontram ativos no sistema */
+    // Clientes que se encontram ativos no sistema
     private final Lock lClientesAtivos = new ReentrantLock();
     // Clientes que se encontram ativos no sistema
     public Map<String, Socket> clientesativos = new HashMap<>();
@@ -68,12 +68,16 @@ public class ServidorImpl implements interfaceGlobal{
         public String getIdservidor() {
             return this.idservidor;
         }
+        
+        public void atualizaDivida(double custo) {
+            this.divida += custo;
+        }
     }
 
     @Override
     public int registaCliente(String email, String pass) {
-        Cliente c;
-        if ((c = clientes.get(email)) != null) return 1;
+        Cliente c = clientes.get(email);
+        if (c != null) return 1;
         else {
             c = new Cliente(email,pass);
             clientes.put(email,c);
@@ -83,42 +87,32 @@ public class ServidorImpl implements interfaceGlobal{
 
     @Override
     public int autenticaCliente(String email, String pass) {
-        Cliente c;
-        if ((c = clientes.get(email)) == null) return 1;
-        else if ((c.getPassword().equals(pass)) && !clientesativos.containsKey(email)) return 0;
+        Cliente c = clientes.get(email);
+        if (c == null) return 1;
+        else if (c.getPassword().equals(pass) && !clientesativos.containsKey(email)) return 0;
         else return 1;
     }
 
     @Override
     public String reservarPorPedido(String email, String type){
-        String resultado = null;
-        try {
-            resultado = cat.reservaPedido(type);
-            if (!resultado.equals("")) {
-                clientes.get(email).setIdservidor(resultado);
-                resultado = "id para libertar: " + resultado;
-            }
-            else resultado = "Servidor inexistente";
+        String resultado;
+        resultado = cat.reservaPedido(type);
+        if (!resultado.equals("")) {
+            clientes.get(email).setIdservidor(resultado);
+            resultado = "id para libertar: " + resultado;
         }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        else resultado = "Servidor inexistente";
         return resultado;
     }
 
+    @Override
     public String reservarLeilao(String email, String type, String valor) {
-        String resultado = null;
-        try {
-            resultado = cat.reservaLeilao(email,type,Double.parseDouble(valor));
-            if (!resultado.equals("")) {
-                clientes.get(email).setIdservidor(resultado);
-                resultado = "id para libertar: " + resultado;
-            }
-            else resultado = "Servidor inexistente";
+        String resultado = cat.reservaLeilao(email,type,Double.parseDouble(valor));
+        if (!resultado.equals("")) {
+            clientes.get(email).setIdservidor(resultado);
+            resultado = "id para libertar: " + resultado;
         }
-        catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        else resultado = "Servidor inexistente";
         return resultado;
     }
 
@@ -126,25 +120,17 @@ public class ServidorImpl implements interfaceGlobal{
     public String libertaReserva(String email, String id){
         String resultado = "";
         if (clientes.get(email).getIdservidor().equals(id)) {
-            String[] p = id.split(" ");
-            if (id.contains("l")) {
-                cat.libertaReservaLeilao(id);
-                clientes.get(email).setIdservidor("");
-                double precoServer = cat.getPrice(id);
-                resultado += precoServer;
-            }
-            else {
-                cat.libertaReservaPedido(id);
-                clientes.get(email).setIdservidor("");
-                double precoServer = cat.getPrice(id);
-                resultado += precoServer;
-            }
+            if (id.contains("l")) cat.libertaReservaLeilao(id);
+            else cat.libertaReservaPedido(id);
+            clientes.get(email).setIdservidor("");
+            double precoServer = cat.getPrice(id);
+            resultado = Double.toString(precoServer);
         }
         return resultado;
     }
 
     public void setValorDivida(String email, double divida){
-        double dividaAcumulada = this.getValorDivida(email);
+        double dividaAcumulada = getValorDivida(email);
         this.clientes.get(email).setDivida(dividaAcumulada + divida);
     }
 
@@ -155,19 +141,26 @@ public class ServidorImpl implements interfaceGlobal{
     //retorna o preco a que o cliente reservou o server que possui, caso possua algum
     public double temServidor(String email){
         //vejo se cliente tem ou não servidor
-        if(!this.clientes.get(email).getIdservidor().equals("")){
-            return this.cat.getPrice(this.clientes.get(email).getIdservidor());
+        try {
+            if(!this.clientes.get(email).getIdservidor().equals("")){
+                return this.cat.getPrice(this.clientes.get(email).getIdservidor());
+            }
+            return 0;
         }
-
-        return 0;
+        catch (NullPointerException e) {
+            return -1;
+        }
     }
 
     public void logOut(String email) {
-        Cliente cliente = this.clientes.get(email);
-        if (!cliente.getIdservidor().equals("")) {
-            libertaReserva(email,cliente.getIdservidor());
+        try {
+            Cliente cliente = this.clientes.get(email);
+            if (!cliente.getIdservidor().equals("")) {
+                libertaReserva(email,cliente.getIdservidor());
+            }
+            this.clientesativos.remove(email);
         }
-        this.clientesativos.remove(email);
+        catch (NullPointerException e) {}
     }
 
     //cliente quer sair, usando um exit

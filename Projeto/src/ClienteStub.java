@@ -57,7 +57,6 @@ public class ClienteStub implements interfaceGlobal{
         catch (IOException e) {
             e.printStackTrace();
         }*/
-        
         return res;
     }
 
@@ -139,23 +138,21 @@ public class ClienteStub implements interfaceGlobal{
         }*/
         return resposta;
     }
+    
+    public void atualizaDivida(String email, long divida) {
+        
+    }
 
+    @Override
     public String reservarLeilao(String email, String type, String valor){
-        String pedido = "leilao";
-        pedido+= " ";
-        pedido+=type;
-        pedido+= " ";
-        pedido+=valor;
-
+        String pedido = "leilao "+type+" "+valor;
         out.println(pedido);
         out.flush();
-
         String resposta = null;
         try {
             resposta = takeMessage();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
+        catch (InterruptedException e) {}
         return resposta;
     }
 

@@ -1,18 +1,10 @@
-//import java.io.BufferedReader;
-//import java.io.IOException;
-//import java.io.InputStreamReader;
-//import java.io.PrintWriter;
-//import java.net.Socket;
-//import java.util.HashMap;
-//import java.util.Map;
-
 /**
  *
  * @author João Marques, Nuno Rei, Jaime Leite e Hugo Nogueira
  * @version 01-2019
  */
 public class Cliente {
-
+    
     public static void main(String[] args) throws Exception {
         ClienteStub c = new ClienteStub();
         String email = null;
@@ -20,62 +12,71 @@ public class Cliente {
         while (true) {
             String s = System.console().readLine();
             String[] p = s.split(" ");
-            if (email == null){
+            if(email == null){
                 switch (p[0]) {
                     case "regista":
-                        int reg = c.registaCliente(p[1], p[2]);
-                        if (reg == 0) System.out.println("Registado");
+                        try {
+                            int reg = c.registaCliente(p[1], p[2]);
+                            if (reg == 0)
+                                System.out.println("Registado");
+                        }
+                        catch (ArrayIndexOutOfBoundsException e) {
+                            System.out.println("Coloque 'regista <email> <pass>.");
+                        }
                         break;
                         
                     case "autentica":
-                        int aut = c.autenticaCliente(p[1], p[2]);
-                        if (aut == 0) {
-                            email = p[1];
-                            System.out.println("Autenticado com sucesso");
+                        try {
+                            int aut = c.autenticaCliente(p[1], p[2]);
+                            if (aut == 0) {
+                                email = p[1];
+                                System.out.println("Autenticado com sucesso");
+                            }
+                        }
+                        catch (ArrayIndexOutOfBoundsException e) {
+                            System.out.println("Coloque 'autentica <email> <pass>'.");
                         }
                         break;
                         
                     case "exit":
                         exit = 1;
                         break;
-                    //default:
-                      //  System.out.println("Comando invalido.");
-                        //break;
+                        
+                    default:
+                        System.out.println("Comando invalido.");
+                        break;
                 }
             }
             else {
                 switch (p[0]) {
                     case "pedir":
-                        s = c.reservarPorPedido(email,p[1]);
-                        System.out.println(s);
-                        /*int reg = c.registaCliente(p[1], p[2]);
-                        if (reg == 0) System.out.println("Registado");*/
-                        /*System.out.println("Registado");
-                        inicialTime = System.currentTimeMillis();*/
-                        //System.out.println("Registado");
+                        try {
+                            s = c.reservarPorPedido(email,p[1]);
+                            System.out.println(s);
+                        }
+                        catch (ArrayIndexOutOfBoundsException e) {
+                            System.out.println("Coloque 'pedir <type_server>'.");
+                        }
                         break;
                         
                     case "leilao":
-                        /*int aut = c.autenticaCliente(p[1], p[2]);
-                        if (aut == 0) {
-                            System.out.println("Autenticado com sucesso");
-                        }*/
-                        String resulleilao = c.reservarLeilao(email,p[1],p[2]);
-                        System.out.println(resulleilao);
+                        try {
+                            String resulleilao = c.reservarLeilao(email,p[1],p[2]);
+                            System.out.println(resulleilao);
+                        }
+                        catch (ArrayIndexOutOfBoundsException e) {
+                            System.out.println("Coloque 'leilao <type_server> <value>'.");
+                        }
                         break;
                         
                     case "libertar":
-                        s = c.libertaReserva(email, p[1]);
-                        System.out.println(s);
-                        /*int a = c.autenticaCliente(p[1], p[2]);
-                        if (a == 0) {
-                            System.out.println("Autenticado com sucesso");
-                        }*/
-                        /*if (inicialTime == 0);
-                        else finalTime = System.currentTimeMillis()-inicialTime;
-                        System.out.println("Está com uma divida de " + finalTime);*/
-                        //System.out.println("Está com uma divida de " + finalTime);
-                        //System.out.println(s);
+                        try {
+                            s = c.libertaReserva(email, p[1]);
+                            System.out.println(s);
+                        }
+                        catch (ArrayIndexOutOfBoundsException e) {
+                            System.out.println("Coloque 'libertar <id_server>'.");
+                        }
                         break;
                         
                     case "divida":
@@ -86,6 +87,9 @@ public class Cliente {
                     case "exit":
                         exit = 1;
                         // remover dos clientes conectados
+                        // verificar se quando faz exit se tem algum servidor alocado
+                        //
+                        //c.removeCliente(email);
                         break;
                         
                     default:
@@ -93,9 +97,11 @@ public class Cliente {
                         break;
                 }
             }
-            if (exit == 1) break;
+            if (exit == 1) {
+                c.exit();
+                break;
+            }
         }
-        c.exit();
         System.out.println("Exiting...");
     }
 }

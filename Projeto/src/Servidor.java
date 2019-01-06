@@ -58,8 +58,11 @@ public class Servidor implements Runnable {
                         break;
                         
                     case "pedir":
-                        s = st.reservarPorPedido(email, p[1]);
-                        inicialTime = System.currentTimeMillis();
+                        if(st.temServidor(email) == 0) {
+                            s = st.reservarPorPedido(email, p[1]);
+                            inicialTime = System.currentTimeMillis();
+                        }
+                        else s = "Já tem um servidor";
                         break;
 
                     case "libertar":
@@ -72,6 +75,7 @@ public class Servidor implements Runnable {
                         }
                         else s = "Identificador de Servidor invalido";
                         break;
+                        
                     case "divida":
                         double divida = st.getValorDivida(email);
                         s = "Tem uma divida de: " + divida + "$";
@@ -91,15 +95,13 @@ public class Servidor implements Runnable {
                         
                     case "exit":
                         s = "exit";
-                        double valor = 0.0;
+                        double valor;
                         if((valor = st.temServidor(email)) != 0){
                             finalTime = (System.currentTimeMillis() - inicialTime) / 1000;
                             //preço a que o server foi reservado
                             st.setValorDivida(email, (finalTime * valor));
                         }
                         break;
-                        
-                    default:
                 }
                 out.println(s);
                 out.flush();
@@ -118,7 +120,7 @@ public class Servidor implements Runnable {
             out.close();
             in.close();
         }
-        catch (IOException | NumberFormatException e){
+        catch (IOException  e){
             e.printStackTrace();
         }
     }
