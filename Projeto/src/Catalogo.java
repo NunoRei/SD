@@ -78,31 +78,31 @@ public class Catalogo {
 	}
 
 	public void putProposta(String email, double valor) {
-            lp.lock();
-            try {
+            //lp.lock();
+            //try {
 		this.propostas.put(email, valor);
 		if (propostas.size() == 1) this.nextclient = email;
                 calcMaiorLicitante();
-            }
-            finally {
-                lp.unlock();
-            }
+            //}
+            //finally {
+            //lp.unlock();
+            //}
 	}
 
 	public void removeProposta(String email) {
-            lp.lock();
-            try {
+            //lp.lock();
+            //try {
 		this.propostas.remove(email);
-            }
-            finally {
-                lp.unlock();
-            }
+           // }
+            //finally {
+             //   lp.unlock();
+            //}
 	}
 
 	/* Calcula o maior licitante entre as propostas e atualiza o preco para o seu valor */
 	public void calcMaiorLicitante() {
-            lp.lock();
-            try {
+            //lp.lock();
+            //try {
 		String next = "";
 		Double res = 0.00;
 		for (Map.Entry<String, Double> licitacao : this.propostas.entrySet()) {
@@ -112,10 +112,10 @@ public class Catalogo {
                     }
 		}
 		this.nextclient = next;
-            }
-            finally {
-                lp.unlock();
-            }
+           // }
+            //finally {
+             //   lp.unlock();
+            //}
 	}
     }
 
@@ -206,7 +206,7 @@ public class Catalogo {
 		s.lp.unlock();
             }
 	}
-        finally {
+        catch (Exception e) {
             l.unlock();
 	}
     }
@@ -225,7 +225,7 @@ public class Catalogo {
 		s.ls.unlock();
             }
 	}
-        finally {
+        catch (Exception e) {
             l.unlock();
 	}
     }
