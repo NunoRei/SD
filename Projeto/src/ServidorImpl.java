@@ -16,14 +16,12 @@ public class ServidorImpl implements interfaceGlobal{
     public Map<String, Socket> clientesativos = new HashMap<>();
     private final Catalogo cat = new Catalogo();
 
-    private String clienteAtual;
-    private float pricePerHour;
-
     private static class Cliente {
         private final String email;
         private final String password;
         private String idservidor; // string vazia se nao tiver nenhum
         private double divida;
+        private double valorServerAtual;
         private final Lock lc = new ReentrantLock();
 
         public Cliente(String email,String pass) {
@@ -31,6 +29,7 @@ public class ServidorImpl implements interfaceGlobal{
             this.password = pass;
             this.idservidor = "";
             this.divida = 0.0;
+            this.valorServerAtual = 0.0;
         }
 
         public String getPassword() {
@@ -55,6 +54,14 @@ public class ServidorImpl implements interfaceGlobal{
 
         public String getIdservidor() {
             return this.idservidor;
+        }
+        
+        public void setValorServerAtual(double preco) {
+            this.valorServerAtual = preco;
+        }
+        
+        public double getValorServerAtual() {
+            return this.valorServerAtual;
         }
     }
 
@@ -98,6 +105,7 @@ public class ServidorImpl implements interfaceGlobal{
         resultado = cat.reservaPedido(type);
         if (!resultado.equals("")) {
             clientes.get(email).setIdservidor(resultado);
+            clientes.get(email).setValorServerAtual(Double.parseDouble(resultado.substring(1)));
             resultado = "id para libertar: " + resultado;
         }
         else resultado = "Servidor inexistente";
@@ -109,6 +117,7 @@ public class ServidorImpl implements interfaceGlobal{
         String resultado = cat.reservaLeilao(email,type,Double.parseDouble(valor));
         if (!resultado.equals("")) {
             clientes.get(email).setIdservidor(resultado);
+            clientes.get(email).setValorServerAtual(Double.parseDouble(valor));
             resultado = "id para libertar: " + resultado;
         }
         else resultado = "Servidor inexistente";
@@ -122,8 +131,8 @@ public class ServidorImpl implements interfaceGlobal{
             if (id.contains("l")) cat.libertaReservaLeilao(id);
             else cat.libertaReservaPedido(id);
             clientes.get(email).setIdservidor("");
-            double precoServer = cat.getPrice(id);
-            resultado = Double.toString(precoServer);
+            resultado = Double.toString(clientes.get(email).getValorServerAtual());
+            clientes.get(email).setValorServerAtual(0.0);
         }
         return resultado;
     }
@@ -141,7 +150,7 @@ public class ServidorImpl implements interfaceGlobal{
     public synchronized double temServidor(String email){
         Cliente cliente = this.clientes.get(email);
         if(cliente != null && !cliente.getIdservidor().equals(""))
-            return this.cat.getPrice(cliente.getIdservidor());
+            return this.clientes.get(email).getValorServerAtual();
         return 0;
     }
 
@@ -153,25 +162,5 @@ public class ServidorImpl implements interfaceGlobal{
             }
             this.clientesativos.remove(email);
         }
-    }
-
-    //Colocar o cliente no servidor
-    public void addCliente(String nome) {
-        this.clienteAtual = nome;
-    }
-
-    //Retirar o cliente do servidor
-    public void removeCliente() {
-        this.clienteAtual = null;
-    }
-
-    //Retornar nome do cliente
-    public String getClienteAtual() {
-        return this.clienteAtual;
-    }
-
-    //Atualizar preco por hora em caso de leilao
-    public void setPricePerHour(float price) {
-        this.pricePerHour = price;
     }
 }

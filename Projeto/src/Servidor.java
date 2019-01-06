@@ -81,14 +81,7 @@ public class Servidor implements Runnable {
                         s = "Tem uma divida de: " + divida + "$";
                         break;
                         
-                    case "leilao": // So um teste de fazer broadcast de mensagens NAO E O FUNCIONAMENTO DO LEILAO
-                        /*for (Socket sk : st.clientesativos.values()) {
-                            if (sk != x) {
-                                PrintWriter skout = new PrintWriter(sk.getOutputStream());
-                                skout.println("all: Leilao iniciado");
-                                skout.flush();
-                            }
-                        }*/
+                    case "leilao":
                         s = st.reservarLeilao(email, p[1], p[2]);
                         inicialTime = System.currentTimeMillis();
                         break;

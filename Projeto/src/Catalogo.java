@@ -1,8 +1,6 @@
 import java.util.Map;
 import java.util.HashMap;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.*;
 
 /**
  *
@@ -10,20 +8,15 @@ import java.util.concurrent.locks.Condition;
  * @version 01-2019
  */
 public class Catalogo {
-    private final int MAX = 2;
-    private Map<String, Servidor> pedido;
-    private Map<String, ServidorLeilao> leilao;
-    private Map<String, Double> propostas;
-    private int ocupacaoleilao = 0;
-    private int ocupacaopropostas = 0;
+    private final Map<String, Servidor> pedido;
+    private final Map<String, ServidorLeilao> leilao;
     private final Lock l = new ReentrantLock();
-    private final Condition pavaliable = l.newCondition();
-    private final Condition notAvaliable = l.newCondition();
 
     private class Servidor {
 	private final String id;
 	private final String type;
 	private final Double preco;
+        private int clientesEmEspera;
 	private int quantidade;
 	private final Lock ls = new ReentrantLock();
 	private final Condition notTaken = ls.newCondition();
@@ -33,6 +26,7 @@ public class Catalogo {
             this.type = type;
             this.preco = preco;
             this.quantidade = quantidade;
+            this.clientesEmEspera = 0;
         }
 
 	public String getType() {
@@ -79,7 +73,6 @@ public class Catalogo {
 
 	public void putProposta(String email, double valor) {
 		this.propostas.put(email, valor);
-		//if (propostas.size() == 1) this.nextclient = email;
                 calcMaiorLicitante();
 	}
 
@@ -112,26 +105,20 @@ public class Catalogo {
 	leilao.put("l1.50", new ServidorLeilao("t6", "l1.50", 0.00, 1));
     }
 
-    public double getPrice(String id) {
-	if (id.contains("l")) return this.leilao.get(id).getPreco();
-            return this.pedido.get(id).getPreco();
-    }
-
     public String reservaPedido(String type) {
 	l.lock();
 	try {
-            /*while(ocupacaopedido == MAX) {
-		pavaliable.await();
-            }
-            ocupacaopedido+=1;*/
             Servidor s = this.pedido.get(type);
             s.ls.lock();
             try {
 		l.unlock();
                 while (s.quantidade == 0) {
                     ServidorLeilao sl = this.leilao.get("l"+type);
-                    if (sl.quantidade == 0)
+                    if (sl.quantidade == 0) {
+                        s.clientesEmEspera+=1;
                         s.notTaken.await();
+                        s.clientesEmEspera-=1;
+                    }
                     else {
                         sl.quantidade -= 1;
                         sl.preco = s.getPreco();
@@ -148,7 +135,7 @@ public class Catalogo {
 		s.ls.unlock();
             }
 	}
-        catch (InterruptedException e) {
+        catch (InterruptedException | NullPointerException e) {
             l.unlock();
             return "";
 	}
@@ -190,9 +177,13 @@ public class Catalogo {
             try {
 		l.unlock();
 		s.quantidade += 1;
-		s.calcMaiorLicitante();
-                ss.notTaken.signalAll();
-		s.notBiggest.signalAll();
+                if(ss.clientesEmEspera > 0) {
+                    ss.notTaken.signalAll();
+                }
+                else {
+                    s.calcMaiorLicitante();
+                    s.notBiggest.signalAll();
+                }	
             }
             finally {
 		s.lp.unlock();

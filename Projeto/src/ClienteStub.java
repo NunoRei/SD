@@ -1,5 +1,4 @@
 import java.io.BufferedReader;
-//import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -10,7 +9,6 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- *
  * @author João Marques, Nuno Rei, Jaime Leite e Hugo Nogueira
  * @version 01-2019
  */
@@ -22,11 +20,6 @@ public class ClienteStub implements interfaceGlobal{
     private final Queue<String> received;
     private final Lock l = new ReentrantLock();
     private final Condition notEmpty = l.newCondition();
-
-    /*
-    private String email;
-    private String password;
-    private float value_to_pay;*/
 
     public ClienteStub() throws Exception{
         x = new Socket("localhost",12345);
@@ -43,7 +36,6 @@ public class ClienteStub implements interfaceGlobal{
         String pedido = "regista "+email+" "+pass;
         out.println(pedido);
         out.flush();
-        //while (received.isEmpty());
         String resposta;
         int res = 0;
         try {
@@ -51,12 +43,6 @@ public class ClienteStub implements interfaceGlobal{
             res = Integer.parseInt(resposta);
         }
         catch (InterruptedException | NumberFormatException e) {}
-        /*try {
-            resposta = in.readLine();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }*/
         return res;
     }
 
@@ -65,7 +51,6 @@ public class ClienteStub implements interfaceGlobal{
         String pedido = "autentica "+email+" "+pass;
         out.println(pedido);
         out.flush();
-        //while (received.isEmpty());
         String resposta;
         int res = 0;
         try {
@@ -73,12 +58,6 @@ public class ClienteStub implements interfaceGlobal{
             res = Integer.parseInt(resposta);
         }
         catch (InterruptedException e) {}
-        /*try {
-            resposta = in.readLine();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }*/
         return res;
     }
 
@@ -91,13 +70,7 @@ public class ClienteStub implements interfaceGlobal{
         try {
             resposta = takeMessage();
         }
-        catch (InterruptedException e) {}       
-         /*try {
-            resposta = in.readLine();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }*/
+        catch (InterruptedException e) {}
         return resposta;
     }
 
@@ -106,18 +79,11 @@ public class ClienteStub implements interfaceGlobal{
         String pedido = "libertar "+id;
         out.println(pedido);
         out.flush();
-        //while (received.isEmpty());
         String resposta = null;
         try {
             resposta = takeMessage();
         }
         catch (InterruptedException e) {}
-        /*try {
-            resposta = in.readLine();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }*/
         return resposta;
     }
     
@@ -130,12 +96,6 @@ public class ClienteStub implements interfaceGlobal{
             resposta = takeMessage();
         }
         catch (InterruptedException e) {}
-        /*try {
-            resposta = in.readLine();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }*/
         return resposta;
     }
 
@@ -164,12 +124,6 @@ public class ClienteStub implements interfaceGlobal{
             res = Integer.parseInt(resposta);
         }
         catch (NumberFormatException e) {}
-        /*try {
-            resposta = in.readLine();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }*/
         return res;
     }
 
@@ -185,12 +139,6 @@ public class ClienteStub implements interfaceGlobal{
             res = Integer.parseInt(resposta);
         }
         catch (NumberFormatException e) {}
-        /*try {
-            resposta = in.readLine();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }*/
         return res;
     }
 
@@ -199,12 +147,6 @@ public class ClienteStub implements interfaceGlobal{
         out.println(pedido);
         out.flush();
     }
-    
-    //Verifica palavra passe
-    /*public boolean Verifica_Pass(String pass){
-        return true;
-        //return this.password.equals(pass);
-    }*/
 
     public void addMessage(String s) {
         l.lock();
