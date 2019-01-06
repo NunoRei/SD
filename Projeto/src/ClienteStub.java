@@ -138,10 +138,6 @@ public class ClienteStub implements interfaceGlobal{
         }*/
         return resposta;
     }
-    
-    public void atualizaDivida(String email, long divida) {
-        
-    }
 
     @Override
     public String reservarLeilao(String email, String type, String valor){
@@ -205,10 +201,10 @@ public class ClienteStub implements interfaceGlobal{
     }
     
     //Verifica palavra passe
-    public boolean Verifica_Pass(String pass){
+    /*public boolean Verifica_Pass(String pass){
         return true;
-        /*return this.password.equals(pass);*/
-    }
+        //return this.password.equals(pass);
+    }*/
 
     public void addMessage(String s) {
         l.lock();

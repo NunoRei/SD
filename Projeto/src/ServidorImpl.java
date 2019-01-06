@@ -1,20 +1,12 @@
-//import java.io.BufferedReader;
-import java.io.IOException;
-//import java.io.InputStreamReader;
-//import java.io.PrintWriter;
-//import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.concurrent.locks.*;
 /**
- *
  * @author João Marques, Nuno Rei, Jaime Leite e Hugo Nogueira
  * @version 01-2019
  */
-
 public class ServidorImpl implements interfaceGlobal{
     //map que contem clientes que fazem parte do sistema
     private Map<String, Cliente> clientes = new HashMap<>();
@@ -27,7 +19,7 @@ public class ServidorImpl implements interfaceGlobal{
     //fila diferente da seguinte da anterior, pois aqui os clientes so entram quando estao a participar num leilao
     //clientes conectados e que pretendem obtrer servidor em leilao
     private Map<String, Socket> clientesLeilao = new HashMap<>();
-    private Catalogo cat = new Catalogo();
+    private final Catalogo cat = new Catalogo();
 
     private String clienteAtual;
     private float pricePerHour;
@@ -37,6 +29,7 @@ public class ServidorImpl implements interfaceGlobal{
         private final String password;
         private String idservidor; // string vazia se nao tiver nenhum
         private double divida;
+        private final Lock lc = new ReentrantLock();
 
         public Cliente(String email,String pass) {
             this.email = email;
@@ -87,10 +80,25 @@ public class ServidorImpl implements interfaceGlobal{
 
     @Override
     public int autenticaCliente(String email, String pass) {
-        Cliente c = clientes.get(email);
-        if (c == null) return 1;
-        else if (c.getPassword().equals(pass) && !clientesativos.containsKey(email)) return 0;
-        else return 1;
+        lClientesAtivos.lock();
+        try {
+            Cliente c = clientes.get(email);
+            if (c == null) {
+                lClientesAtivos.unlock();
+                return 1;
+            }
+            c.lc.lock();
+            try {
+                lClientesAtivos.unlock();
+                if (clientesativos.containsKey(email)) return 3;
+                if (c.getPassword().equals(pass)) return 0;
+                return 2;
+            }
+            finally {
+                c.lc.unlock();
+            }
+        }
+        catch (Exception e) {return 1;}
     }
 
     @Override
@@ -139,28 +147,22 @@ public class ServidorImpl implements interfaceGlobal{
     }
 
     //retorna o preco a que o cliente reservou o server que possui, caso possua algum
-    public double temServidor(String email){
+    public synchronized double temServidor(String email){
         //vejo se cliente tem ou não servidor
-        try {
-            if(!this.clientes.get(email).getIdservidor().equals("")){
-                return this.cat.getPrice(this.clientes.get(email).getIdservidor());
-            }
-            return 0;
-        }
-        catch (NullPointerException e) {
-            return -1;
-        }
+        Cliente cliente = this.clientes.get(email);
+        if(cliente != null && !cliente.getIdservidor().equals(""))
+            return this.cat.getPrice(cliente.getIdservidor());
+        return 0;
     }
 
-    public void logOut(String email) {
-        try {
-            Cliente cliente = this.clientes.get(email);
+    public synchronized void logOut(String email) {
+        Cliente cliente = this.clientes.get(email);
+        if(cliente != null) {
             if (!cliente.getIdservidor().equals("")) {
                 libertaReserva(email,cliente.getIdservidor());
             }
             this.clientesativos.remove(email);
         }
-        catch (NullPointerException e) {}
     }
 
     //cliente quer sair, usando um exit

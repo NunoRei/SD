@@ -18,7 +18,9 @@ public class Cliente {
                         try {
                             int reg = c.registaCliente(p[1], p[2]);
                             if (reg == 0)
-                                System.out.println("Registado");
+                                System.out.println("Registado.");
+                            if (reg == 1)
+                                System.out.println("Cliente já registado.");
                         }
                         catch (ArrayIndexOutOfBoundsException e) {
                             System.out.println("Coloque 'regista <email> <pass>.");
@@ -30,8 +32,11 @@ public class Cliente {
                             int aut = c.autenticaCliente(p[1], p[2]);
                             if (aut == 0) {
                                 email = p[1];
-                                System.out.println("Autenticado com sucesso");
+                                System.out.println("Autenticado com sucesso.");
                             }
+                            if (aut == 1) System.out.println("Cliente nao registado.");
+                            if (aut == 2) System.out.println("Password invalida.");
+                            if (aut == 3) System.out.println("Cliente ja autenticado.");
                         }
                         catch (ArrayIndexOutOfBoundsException e) {
                             System.out.println("Coloque 'autentica <email> <pass>'.");
@@ -81,15 +86,11 @@ public class Cliente {
                         
                     case "divida":
                         s = c.obterDivida();
-                        System.out.println(s);
+                        System.out.println(s+".");
                         break;
                         
                     case "exit":
                         exit = 1;
-                        // remover dos clientes conectados
-                        // verificar se quando faz exit se tem algum servidor alocado
-                        //
-                        //c.removeCliente(email);
                         break;
                         
                     default:

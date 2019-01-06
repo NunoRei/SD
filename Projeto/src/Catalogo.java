@@ -21,9 +21,9 @@ public class Catalogo {
     private final Condition notAvaliable = l.newCondition();
 
     private class Servidor {
-	private String id;
-	private String type;
-	private Double preco;
+	private final String id;
+	private final String type;
+	private final Double preco;
 	private int quantidade;
 	private final Lock ls = new ReentrantLock();
 	private final Condition notTaken = ls.newCondition();
@@ -49,8 +49,8 @@ public class Catalogo {
     }
 
     private class ServidorLeilao {
-	private String id;
-	private String type;
+	private final String id;
+	private final String type;
 	private Double preco;
 	private int quantidade;
 	private String nextclient = "";
@@ -78,31 +78,17 @@ public class Catalogo {
 	}
 
 	public void putProposta(String email, double valor) {
-            //lp.lock();
-            //try {
 		this.propostas.put(email, valor);
 		if (propostas.size() == 1) this.nextclient = email;
                 calcMaiorLicitante();
-            //}
-            //finally {
-            //lp.unlock();
-            //}
 	}
 
 	public void removeProposta(String email) {
-            //lp.lock();
-            //try {
 		this.propostas.remove(email);
-           // }
-            //finally {
-             //   lp.unlock();
-            //}
 	}
 
 	/* Calcula o maior licitante entre as propostas e atualiza o preco para o seu valor */
 	public void calcMaiorLicitante() {
-            //lp.lock();
-            //try {
 		String next = "";
 		Double res = 0.00;
 		for (Map.Entry<String, Double> licitacao : this.propostas.entrySet()) {
@@ -112,10 +98,6 @@ public class Catalogo {
                     }
 		}
 		this.nextclient = next;
-           // }
-            //finally {
-             //   lp.unlock();
-            //}
 	}
     }
 
@@ -147,7 +129,14 @@ public class Catalogo {
             try {
 		l.unlock();
                 while (s.quantidade == 0) {
-                    s.notTaken.await();
+                    ServidorLeilao sl = this.leilao.get("l"+type);
+                    if (sl.quantidade == 0)
+                        s.notTaken.await();
+                    else {
+                        sl.quantidade -= 1;
+                        sl.preco = s.getPreco();
+                        return sl.getType();
+                    }
                 }
                 s.quantidade -= 1;
                 return s.getType();	
