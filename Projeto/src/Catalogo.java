@@ -79,7 +79,7 @@ public class Catalogo {
 
 	public void putProposta(String email, double valor) {
 		this.propostas.put(email, valor);
-		if (propostas.size() == 1) this.nextclient = email;
+		//if (propostas.size() == 1) this.nextclient = email;
                 calcMaiorLicitante();
 	}
 
@@ -184,15 +184,19 @@ public class Catalogo {
 	l.lock();
 	try {
             ServidorLeilao s = this.leilao.get(id);
+            Servidor ss = this.pedido.get(id.substring(1));
+            ss.ls.lock();
             s.lp.lock();
             try {
 		l.unlock();
 		s.quantidade += 1;
 		s.calcMaiorLicitante();
+                ss.notTaken.signalAll();
 		s.notBiggest.signalAll();
             }
             finally {
 		s.lp.unlock();
+                ss.ls.unlock();
             }
 	}
         catch (Exception e) {

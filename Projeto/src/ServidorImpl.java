@@ -14,11 +14,6 @@ public class ServidorImpl implements interfaceGlobal{
     private final Lock lClientesAtivos = new ReentrantLock();
     // Clientes que se encontram ativos no sistema
     public Map<String, Socket> clientesativos = new HashMap<>();
-    //clientes conectados e � espera, que pretendem obter servidor por pedido
-    private Map<String, Socket> clientesPedido = new HashMap<>();
-    //fila diferente da seguinte da anterior, pois aqui os clientes so entram quando estao a participar num leilao
-    //clientes conectados e que pretendem obtrer servidor em leilao
-    private Map<String, Socket> clientesLeilao = new HashMap<>();
     private final Catalogo cat = new Catalogo();
 
     private String clienteAtual;
@@ -61,19 +56,15 @@ public class ServidorImpl implements interfaceGlobal{
         public String getIdservidor() {
             return this.idservidor;
         }
-        
-        public void atualizaDivida(double custo) {
-            this.divida += custo;
-        }
     }
 
     @Override
-    public int registaCliente(String email, String pass) {
-        Cliente c = clientes.get(email);
+    public synchronized int registaCliente(String email, String pass) {
+        Cliente c = this.clientes.get(email);
         if (c != null) return 1;
         else {
             c = new Cliente(email,pass);
-            clientes.put(email,c);
+            this.clientes.put(email,c);
             return 0;
         }
     }
@@ -137,18 +128,17 @@ public class ServidorImpl implements interfaceGlobal{
         return resultado;
     }
 
-    public void setValorDivida(String email, double divida){
+    public synchronized void setValorDivida(String email, double divida){
         double dividaAcumulada = getValorDivida(email);
         this.clientes.get(email).setDivida(dividaAcumulada + divida);
     }
 
-    public double getValorDivida(String email){
+    public synchronized double getValorDivida(String email){
         return this.clientes.get(email).getDivida();
     }
 
     //retorna o preco a que o cliente reservou o server que possui, caso possua algum
     public synchronized double temServidor(String email){
-        //vejo se cliente tem ou não servidor
         Cliente cliente = this.clientes.get(email);
         if(cliente != null && !cliente.getIdservidor().equals(""))
             return this.cat.getPrice(cliente.getIdservidor());
@@ -163,16 +153,6 @@ public class ServidorImpl implements interfaceGlobal{
             }
             this.clientesativos.remove(email);
         }
-    }
-
-    //cliente quer sair, usando um exit
-    // retorna a posicao do servidor que libertou
-    public int retiraServidorExit(String email) {
-           /*
-       quando o cliente sai do sistema, avisa os outros que pretendem obter um servidor do tipo que ele tem, ou seja,
-       faz um notify, ou para os que reservaram a pedido, para aqueles que est�o em leil�o
-        */
-        return 0;
     }
 
     //Colocar o cliente no servidor
@@ -190,36 +170,8 @@ public class ServidorImpl implements interfaceGlobal{
         return this.clienteAtual;
     }
 
-    //Atualizar pre�o por hora em caso de leil�o
+    //Atualizar preco por hora em caso de leilao
     public void setPricePerHour(float price) {
         this.pricePerHour = price;
     }
-
-    //Enquanto o cliente estiver a escrever para o servidor
-    //Falta colocar Times para calcular o tempo que o cliente esteve no servidor para adicionar h� sua d�vida
-    /*public float init(int port) throws IOException {
-        SS = new ServerSocket(port);
-        Socket x;
-        //Time timeInicio = Time.now();
-        while (true) {
-            x = SS.accept();
-            PrintWriter out = new PrintWriter(x.getOutputStream());
-            BufferedReader in = new BufferedReader(new InputStreamReader(x.getInputStream()));
-            while (true) {
-                String s = in.readLine();
-                if(s.equals("exit")) break;
-                //falta por aqui, penso eu, o caso do ele dizer que quer abandonar o servidor que obteve
-                out.println(s);
-                out.flush();
-            }
-            out.close();
-            x.close();
-            removeCliente();
-            break;
-        }
-        //Time timeFim = Time.now();
-        float price = 0;//(toHours(timeFim) - toHours(timeInicio))*pricePerHour;
-        return price;
-    }
-    */
 }
