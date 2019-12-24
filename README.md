@@ -7,4 +7,4 @@ N Clients
 
 Clients make licitations for servers.
 
-Educational Purpouses.
+Educational Purposes.
